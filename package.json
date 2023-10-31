@@ -1,0 +1,51 @@
+{
+  "name": "@crayond_dev/feature-writer",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.26.1",
+    "@fontsource/poppins": "^5.0.8",
+    "@tiptap/core": "^2.0.3",
+    "@tiptap/extension-document": "^2.0.3",
+    "@tiptap/extension-history": "^2.0.3",
+    "@tiptap/extension-paragraph": "^2.0.3",
+    "@tiptap/extension-table": "^2.0.3",
+    "@tiptap/extension-table-cell": "^2.0.3",
+    "@tiptap/extension-table-header": "^2.0.3",
+    "@tiptap/extension-table-row": "^2.0.3",
+    "@tiptap/extension-text": "^2.0.3",
+    "@tiptap/pm": "^2.0.3",
+    "@tiptap/react": "^2.0.3",
+    "ahooks": "^3.7.8",
+    "file-saver": "^2.0.5",
+    "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.2.0",
+    "react-fast-compare": "^3.2.2",
+    "react-icons": "^4.11.0",
+    "react-use": "^17.4.0",
+    "twind": "^0.16.19",
+    "zustand": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.6",
+    "@types/react": "^18.2.15",
+    "@types/react-beautiful-dnd": "^13.1.6",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
