@@ -24,29 +24,12 @@ import { SelectedStep } from "./selectedStep";
 
 import { useFeatureStore } from "../../store/feature";
 import { keys } from "../../utils/constants";
-import { StepsComponentProps } from "../../types";
+import {
+  OptionPropType,
+  StepsComponentProps,
+  splittedStepObjPropType,
+} from "../../types";
 
-export interface stepDefinitionPropType {
-  source_step: string;
-  params: {
-    text?: string;
-    element_id?: string;
-    value?: string;
-  };
-}
-export interface optionPropType {
-  label: string;
-  value: string;
-}
-
-export interface splittedStepObjPropType {
-  component_to_render: string;
-  id: string;
-  placeholder: string;
-  value: string;
-  word: string;
-  param :string
-}
 const Step = forwardRef((props: StepsComponentProps) => {
   const {
     stepRootStyle = "",
@@ -73,7 +56,9 @@ const Step = forwardRef((props: StepsComponentProps) => {
 
   const deleteRef = useRef(null);
 
-  const [splittedStep, setSplittedStep] = useState<any>(null);
+  const [splittedStep, setSplittedStep] = useState<
+    splittedStepObjPropType[] | null
+  >(null);
 
   const keywordRef = useRef<any>(null);
 
@@ -94,17 +79,26 @@ const Step = forwardRef((props: StepsComponentProps) => {
     }
   };
 
-  const handleStepInputsChange = (splittedStepObj:splittedStepObjPropType, value:string) => {
+  const handleStepInputsChange = (
+    splittedStepObj: splittedStepObjPropType,
+    value: string | number
+  ) => {
     const splittedStepCopy = JSON.parse(JSON.stringify(splittedStep));
 
-    splittedStepCopy.forEach((eachSplittedStep:splittedStepObjPropType, index: number, array:splittedStepObjPropType[]) => {
-      if (eachSplittedStep.id === splittedStepObj?.id) {
-        array[index] = {
-          ...splittedStepObj,
-          value,
-        };
+    splittedStepCopy.forEach(
+      (
+        eachSplittedStep: splittedStepObjPropType,
+        index: number,
+        array: splittedStepObjPropType[]
+      ) => {
+        if (eachSplittedStep.id === splittedStepObj?.id) {
+          array[index] = {
+            ...splittedStepObj,
+            value,
+          };
+        }
       }
-    });
+    );
     setSplittedStep(splittedStepCopy);
   };
 
@@ -139,21 +133,26 @@ const Step = forwardRef((props: StepsComponentProps) => {
   useLayoutEffect(() => {
     if (step?.source_step?.length > 1) {
       const sourceStep = stepDefinitions.find(
-        (eachStep: stepDefinitionPropType) =>
-          eachStep?.source_step === step?.source_step
+        (eachStep) => eachStep?.source_step === step?.source_step
       );
       const result = constructStepView({
         source_step: sourceStep?.source_step,
         params: sourceStep?.params,
       });
-      result.forEach((word: any, index: number, array:any[]) => {
-        if (Object.keys(step?.params).includes(word?.param)) {
-          array[index] = {
-            ...word,
-            value: step?.params[word?.param] ?? "",
-          };
+      result.forEach(
+        (
+          word: splittedStepObjPropType,
+          index: number,
+          array: splittedStepObjPropType[]
+        ) => {
+          if (Object.keys(step.params).includes(String(word.param))) {
+            array[index] = {
+              ...word,
+              value: step.params[word.param] ?? "",
+            };
+          }
         }
-      });
+      );
       setSplittedStep(result);
     } else {
       setSplittedStep(null);
@@ -168,28 +167,31 @@ const Step = forwardRef((props: StepsComponentProps) => {
   useEffect(() => {
     if (!splittedStep) return;
     const params = { ...step?.params };
-    const words = splittedStep.reduce((prev:string[], curr:splittedStepObjPropType) => {
-      let result = curr?.value;
-      // To update the params with the selected value
-      if (cucumberExpressions.includes(curr?.word)) {
-        const key = curr?.param;
-        params[key] = result;
-      }
-      // To add quotation if it is string and return
-      if (["{string}"].includes(curr?.word)) {
-        // Add only if it is not a datatable column header value
-        if (
-          options &&
-          !options.some(
-            (option: optionPropType) => option.value === curr.value
-          ) &&
-          curr?.word === "{string}"
-        ) {
-          result = `'${curr?.value}'`;
+    const words = splittedStep.reduce(
+      (prev: string[], curr: splittedStepObjPropType) => {
+        let result = curr?.value;
+        // To update the params with the selected value
+        if (cucumberExpressions.includes(String(curr?.word))) {
+          const key = curr?.param;
+          params[key] = result;
         }
-      }
-      return [...prev, result];
-    }, []);
+        // To add quotation if it is string and return
+        if (["{string}"].includes(String(curr?.word))) {
+          // Add only if it is not a datatable column header value
+          if (
+            options &&
+            !options.some(
+              (option: OptionPropType) => option.value === curr.value
+            ) &&
+            curr?.word === "{string}"
+          ) {
+            result = `'${curr?.value}'`;
+          }
+        }
+        return [...prev, result];
+      },
+      []
+    );
 
     const name = words.join(" ");
     updateStep(name, params, scenarioIndex, stepIndex);
@@ -342,12 +344,10 @@ const Step = forwardRef((props: StepsComponentProps) => {
             {!splittedStep && !step?.name && (
               <Autocomplete
                 className="text-sm font-medium w-full"
-                options={stepDefinitions.map(
-                  (stepDefinition: stepDefinitionPropType) => ({
-                    label: stepDefinition?.source_step,
-                    value: stepDefinition,
-                  })
-                )}
+                options={stepDefinitions.map((stepDefinition) => ({
+                  label: stepDefinition?.source_step,
+                  value: stepDefinition,
+                }))}
                 placeholder="Search to select step"
                 optionProps={{
                   className: "text-sm my-0.5 font-medium text-gray-500",

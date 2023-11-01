@@ -1,5 +1,11 @@
 import { HTMLAttributes } from "react";
 import { TW } from "twind";
+import { EditorDatatableProps } from "../../types";
+
+interface defaultValProps {
+  label?: string;
+  value?: string;
+}
 
 // Box prop types
 export interface BoxProps extends HTMLAttributes<HTMLDivElement> {
@@ -84,7 +90,7 @@ export interface HeadingProps {
   /**
    * as extend the heding key
    */
-  as?: React.ComponentType<any> | string;
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
 // Text prop types
@@ -108,17 +114,18 @@ export interface TextProps {
 }
 
 //TextArea props type
-export interface TextareaProps extends Omit<HTMLAttributes<HTMLTextAreaElement>,"value">{
-  className? : string,
-  rootStyle? : string,
-  placeholderText : string,
+export interface TextareaProps
+  extends Omit<HTMLAttributes<HTMLTextAreaElement>, "value"> {
+  className?: string;
+  rootStyle?: string;
+  placeholderText: string;
   size?: "sm" | "md" | "lg";
-  rows? : number,
+  rows?: number;
   variant?: "flushed" | "outlined";
-  error? : boolean,
-  required? : boolean,
-  disabled? : boolean,
-  value?:string
+  error?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
 }
 // input type props
 export interface InputProps {
@@ -126,7 +133,9 @@ export interface InputProps {
    * class name of the input field for styling purpose
    */
   className?: string;
+
   id?: string;
+
   rootStyle?: string;
   /**
    * Defines the Value to be filled in the input field
@@ -174,7 +183,7 @@ export interface InputProps {
   rightIcon?: React.ReactNode;
 
   rootProps?: {
-    rootStyle?:string
+    rootStyle?: string;
   };
 }
 
@@ -236,11 +245,14 @@ export interface IconProps {
    * Size of the heading
    */
   size?: number;
+  /**
+   * tw css props
+   */
   tw?: TW;
   /**
    * as extend the heding key
    */
-  as?: (props: any) => React.ReactElement | null;
+  as?: React.ReactElement | null;
   /**
    * to using tabIndex number
    */
@@ -265,7 +277,7 @@ export interface SelectProps {
   /**
    * Its default value
    */
-  defaultValue?: any;
+  defaultValue?: defaultValProps | undefined;
 
   /**
    * Handle open in popover
@@ -290,7 +302,7 @@ export interface SelectProps {
   /**
    * handle on input chnage events
    */
-  onInputChange?: (val:React.ChangeEvent) => void;
+  onInputChange?: (val: React.ChangeEvent) => void;
   /**
    * handle clearable input values
    */
@@ -302,15 +314,15 @@ export interface SelectProps {
   /**
    * render options here
    */
-  options?: any;
+  options?: { label: string; value: string };
   /**
    * options props
    */
-  optionProps?: any;
+  optionProps?: OptionProps;
   /**
    * option list props
    */
-  optionListProps?: any;
+  optionListProps?: OptionListProps;
   /**
    * unique id
    */
@@ -344,9 +356,9 @@ export interface SelectProps {
 
   value?: string;
 
-  listProps?: any;
+  listProps?: OptionListProps;
 
-  optionGroupProps?: any;
+  optionGroupProps?: OptionGroupProps;
 
   allowHover?: any;
 
@@ -365,15 +377,15 @@ export interface OptionProps {
   /**
    * Classname to style the component
    */
-  className: string;
+  className?: string;
   /**
    * select options value
    */
-  value: any;
+  value?: string;
   /**
    * options lable
    */
-  label: string;
+  label?: string;
   /**
    * tabIndex
    */
@@ -398,11 +410,11 @@ export interface OptionListProps {
    * Elements to be rendered inside the component
    */
   children?: React.ReactNode;
-  arrowProps: any;
+  arrowProps?: any;
   /**
    * class name of the component for styling
    */
-  className: string;
+  className?: string;
 }
 
 // option group list
@@ -414,11 +426,11 @@ export interface OptionGroupProps {
   /**
    * options lable
    */
-  label: string;
+  label?: string;
   /**
    * class name of the component for styling
    */
-  className: string;
+  className?: string;
 }
 
 // DialogClose props type
@@ -493,7 +505,7 @@ export interface AutocompleteProps {
   /**
    * Its default value
    */
-  defaultValue?: any;
+  defaultValue?: defaultValProps | null;
 
   /**
    * Handle open in popover
@@ -530,15 +542,17 @@ export interface AutocompleteProps {
   /**
    * render options here
    */
-  options?: any;
+  options?: { label: string; value: string }[] | any;
   /**
    * options props
    */
-  optionProps?: any;
+  optionProps?: {
+    className?: string;
+  };
   /**
    * option list props
    */
-  optionListProps?: any;
+  optionListProps?: OptionListProps;
   /**
    * unique id
    */
@@ -568,15 +582,11 @@ export interface AutocompleteProps {
    */
   children?: React.ReactNode;
 
-  arrowProps?: any;
-
   value?: string;
 
-  listProps?: any;
+  listProps?: OptionListProps;
 
-  optionGroupProps?: any;
-
-  allowHover?: any;
+  optionGroupProps?: OptionGroupProps;
 
   variant?: string;
 
@@ -592,7 +602,7 @@ export interface AutocompleteProps {
 export interface MenuProps extends SelectProps {}
 
 // CircularProgress props type
-export interface CircularProgressProps{
+export interface CircularProgressProps {
   /**
    * class name of the component for styling
    */
@@ -618,7 +628,7 @@ export interface EditorProps {
    */
   rootStyle?: string;
 
-  content?: any;
+  content?: EditorDatatableProps;
   /**
    * to change input change event
    */

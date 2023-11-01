@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { apply, tw } from 'twind';
 import { TextareaProps } from '../../types';
 
-const Textarea = forwardRef((props:TextareaProps, ref:React.Ref<HTMLTextAreaElement>| undefined) => {
+const Textarea = forwardRef((props:TextareaProps, ref:React.Ref<HTMLTextAreaElement>) => {
   const {
     className = '',
     rootStyle = '',

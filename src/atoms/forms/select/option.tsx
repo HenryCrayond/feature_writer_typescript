@@ -1,25 +1,26 @@
-import { useListItem, useMergeRefs } from '@floating-ui/react';
-import { KeyboardEvent, forwardRef } from 'react';
-import { apply, tw } from 'twind';
+import { useListItem, useMergeRefs } from "@floating-ui/react";
+import { KeyboardEvent, forwardRef } from "react";
+import { apply, tw } from "twind";
 
-import { useOverlayListContext, useSelectContext } from '../../../hooks';
-import { Box } from '../../layout/box';
-import { OptionProps } from '../../types';
+import { useOverlayListContext, useSelectContext } from "../../../hooks";
+import { Box } from "../../layout/box";
+import { OptionProps } from "../../types";
 
-export const Option = forwardRef((props:OptionProps, propRef) => {
+export const Option = forwardRef((props: OptionProps, propRef) => {
   const { children, className, value, label, ...rest } = props;
 
-  const { activeIndex, setSelectedIndex, listContentRef, setOpen } = useOverlayListContext();
+  const { activeIndex, setSelectedIndex, listContentRef, setOpen } =
+    useOverlayListContext();
 
   const { value: selectedValue, onChange } = useSelectContext();
 
   const optionStyle = apply`
   cursor-pointer px-1.5 py-0.5 rounded ${
-    selectedValue?.value === value && 'text-white'
+    selectedValue?.value === value && "text-white"
   } 
     focus:(outline-none) bg-primary-50(hover:& 
     focus:&) ${
-      selectedValue?.value === value && 'bg-primary(500 500(hover:& focus:&))'
+      selectedValue?.value === value && "bg-primary(500 500(hover:& focus:&))"
     }
   `;
 
@@ -46,13 +47,13 @@ export const Option = forwardRef((props:OptionProps, propRef) => {
       role="option"
       aria-selected={selectedValue?.value === value && index === activeIndex}
       className={tw(optionStyle, className)}
-      data-selected={selectedValue?.value === value ? '' : undefined}
+      data-selected={selectedValue?.value === value ? "" : undefined}
       {...rest}
       ref={listItemRef}
       tabIndex={isActive ? 0 : -1}
       onClick={handleSelect}
-      onKeyDown={(event:KeyboardEvent) => {
-        if (event.key === 'Enter') {
+      onKeyDown={(event: KeyboardEvent) => {
+        if (event.key === "Enter") {
           event.preventDefault();
           handleSelect();
         }
@@ -63,4 +64,4 @@ export const Option = forwardRef((props:OptionProps, propRef) => {
   );
 });
 
-Option.displayName = 'Option';
+Option.displayName = "Option";

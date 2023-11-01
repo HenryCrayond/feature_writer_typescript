@@ -8,7 +8,12 @@ import {
 } from "../utils/constants";
 import { create } from "zustand";
 import { updateParams } from "../utils/helperFunctions";
-import { FeatureProps, ScenarioProps, StepProps } from "../types";
+import {
+  EditorDatatableProps,
+  FeatureProps,
+  ScenarioProps,
+  StepProps,
+} from "../types";
 
 interface DragDropProp {
   droppableId: string;
@@ -28,7 +33,7 @@ interface FeatureStorePropType {
     scenarioIndex: number
   ) => void;
   updateScenarioTable: (
-    tableData: any,
+    tableData: EditorDatatableProps,
     updateScenario: ScenarioProps,
     scenarioIndex: number
   ) => void;
@@ -43,7 +48,7 @@ interface FeatureStorePropType {
   deleteStep: (stepId: number, scenarioId: number) => void;
   updateStep: (
     name: string,
-    params: { page_url: string },
+    params: { page_url?: string },
     scenarioIndex: number,
     stepIndex: number
   ) => void;
@@ -52,11 +57,7 @@ interface FeatureStorePropType {
     scenarioIndex: number,
     stepIndex: number
   ) => void;
-  editSteps: (
-    step: StepProps,
-    scenarioId: number,
-    stepIndex: number
-  ) => void;
+  editSteps: (step: StepProps, scenarioId: number, stepIndex: number) => void;
   handleScenarioChange: (key: string, val: string, index: number) => void;
   dragAndDropChange: (source: DragDropProp, destination: DragDropProp) => void;
 }
@@ -134,9 +135,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
         return updatedStep;
       }
     );
-    const indexArr = featureStateCopy.scenarios.map(
-      (x: ScenarioProps) => x.id
-    );
+    const indexArr = featureStateCopy.scenarios.map((x: ScenarioProps) => x.id);
     const index = indexArr.indexOf(scenarioId) + 1;
     featureStateCopy.scenarios.splice(index, 0, {
       ...duplicateScenario,
@@ -327,15 +326,15 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
     const { featureState } = get();
 
     const featureStateCopy = JSON.parse(JSON.stringify(featureState));
-    let removedStep: any = null;
+    let removedStep: StepProps[] | null | any = null;
 
-    featureStateCopy.scenarios.forEach((scenario: any) => {
+    featureStateCopy.scenarios.forEach((scenario: ScenarioProps) => {
       if (scenario.id === Number(source.droppableId)) {
         removedStep = scenario.steps.splice(source.index, 1);
       }
     });
 
-    featureStateCopy.scenarios.forEach((scenario: any) => {
+    featureStateCopy.scenarios.forEach((scenario: ScenarioProps) => {
       if (scenario.id === Number(destination.droppableId)) {
         scenario.steps.splice(destination.index, 0, removedStep[0]);
       }

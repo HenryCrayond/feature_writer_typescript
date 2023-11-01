@@ -92,7 +92,7 @@ export const Autocomplete = forwardRef(
     const dismiss = useDismiss(data.context);
     const role = useRole(data.context);
 
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeIndex, setActiveIndex] = useState<number|null>(null);
 
     const click = useClick(data.context, {
       enabled: !open,
@@ -109,7 +109,7 @@ export const Autocomplete = forwardRef(
     const listNav = useListNavigation(data.context, {
       listRef,
       activeIndex,
-      onNavigate: () => setActiveIndex,
+      onNavigate: (number) => setActiveIndex(number),
       virtual: true,
       loop: true,
     });
@@ -193,7 +193,7 @@ export const Autocomplete = forwardRef(
                     onKeyDown={(event: React.KeyboardEvent<Element>) => {
                       if (event.key === "Enter") {
                         autocompleteState.handleClearValue();
-                        const reference:any =autocomplete?.refs?.reference?.current;
+                        const reference:any = autocomplete?.refs?.reference?.current;
                         if (reference) {
                           reference.focus();
                         }

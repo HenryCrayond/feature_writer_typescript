@@ -27,36 +27,26 @@ export interface OverlayOptinPropType {
 }
 
 export interface optionsProp {
-  label?: string ; 
+  label?: string;
   value?: string;
 }
 
-export interface useSelectPropType {
-  value?: string ;
+ interface useSelectPropType {
+  value?: string;
   defaultValue?: optionsProp;
   onChange?: (vall: any) => void;
-  controlledValue?:string | optionsProp;
+  controlledValue?: string | optionsProp;
   [key: string]: any;
-
 }
-
-export interface optionPharamProp {
-  label?: string;
-  value?: {
-    params: {};
-    source_step: string;
-  };
-}
-
 export interface useAutocompletePropType {
   clearable?: boolean;
   onChange?: (option: any) => void;
   onInputChange?: (value: any) => void;
   options?: {
-    label: string ; 
-  value: string;
+    label: string;
+    value: string;
   }[];
-  defaultValue?: optionsProp;
+  defaultValue?: optionsProp | null;
 }
 
 export function useOverlay(overlayType: string, options: OverlayOptinPropType) {
@@ -104,7 +94,7 @@ export function useOverlay(overlayType: string, options: OverlayOptinPropType) {
   };
 }
 
-export const OverlayContext = createContext<any|null>(null);
+export const OverlayContext = createContext<any | null>(null);
 
 export const useOverlayContext = () => {
   const context = useContext(OverlayContext);
@@ -167,19 +157,23 @@ export const useAutocomplete = ({
   clearable,
   options,
 }: useAutocompletePropType) => {
-  const [inputValue, setInputValue] = useState<string|any>(defaultValue?.label ?? null);
+  const [inputValue, setInputValue] = useState<string | any>(
+    defaultValue?.label ?? null
+  );
   const [selectedValue, setSelectedValue] = useState(defaultValue ?? null);
 
-  const [filteredOptions, setFilteredOptions] = useState<optionsProp|any>(options || []);
+  const [filteredOptions, setFilteredOptions] = useState<optionsProp | any>(
+    options || []
+  );
 
-  const handleChange = (option:optionsProp) => {
+  const handleChange = (option: optionsProp) => {
     setFilteredOptions([option]);
     setSelectedValue(option);
     setInputValue(option?.label);
     onChange?.(option);
   };
 
-  const handleInputChange = (value:string) => {
+  const handleInputChange = (value: string) => {
     setInputValue(value);
     onInputChange?.(value);
     if (!value) {

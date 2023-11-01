@@ -1,16 +1,30 @@
+import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+
 // SelectedStep component props types
+export interface OptionPropType {
+  label: string;
+  value: string;
+}
+export interface splittedStepObjPropType {
+  component_to_render?: string;
+  id?: string;
+  placeholder?: string;
+  value?: string|number|any;
+  word?: string;
+  param?: string;
+}
 export interface SelectedStepProps {
-  data: any;
-  options: any;
-  addStep: any;
-  onChange: (Obj: any, value: any) => void;
+  data: splittedStepObjPropType[];
+  options: []|OptionPropType[]|null;
+  addStep: (val: ScenarioProps, index: number) => void;
+  onChange: (Obj: splittedStepObjPropType, value: string | number) => void;
 }
 
 // Datatable prop types
 export interface DatatableProps {
   className?: string;
-  datatable?: any;
-  onChange?: (e: any) => void;
+  datatable?: EditorDatatableProps;
+  onChange?: (e: EditorDatatableProps) => void;
   rootStyle?: string;
 }
 
@@ -25,54 +39,26 @@ export interface FeatureListProps {
 
 // Feature list prop types
 export interface FeatureListProps {
-  /**
-   * Class name to style the component
-   */
   className?: string;
-  /**
-   * root style name to style the component
-   */
   flRootStyle?: string;
-  /**
-   * List of features to be displayed inside the component
-   */
   featureList?: FeatureListProps[];
-  /**
-   * Button to add a new feature to the component
-   */
   onAddFeature?: () => void;
-  /**
-   * Button to delete a feature from the component
-   */
-  onDeleteFeature?: (val: any) => void;
-  /**
-   * function to changes a particular feature's name inside the component
-   */
-  onFeatureNameChange?: (val: any, scenarios: any) => void;
-  /**
-   * function to set a particular feature name to active/editable state
-   */
+  onDeleteFeature?: (val: FeatureProps) => void;
+  onFeatureNameChange?: (val: string, feature: FeatureProps) => void;
   setActive?: (id: number) => void;
-  /**
-   * Allowing to copy a feature's detail
-   */
   allowCopy?: boolean;
-  /**
-   * Allowing to download a feature's detail
-   */
   allowDownload?: boolean;
-
   activeId?: undefined;
 }
 
 // Steps components props types
 export interface StepsComponentProps {
   stepRootStyle?: string;
-  addStep: (val:any ,index:number) => void;
-  stepDefinitions: any;
-  options: any;
-  step: any;
-  dragHandleProps?: any;
+  addStep: (val: ScenarioProps, index: number) => void;
+  stepDefinitions: stepDefinitionProps[];
+  options: OptionPropType[]|null;
+  step: StepProps;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null | undefined;
   scenarioIndex: number;
   scenarioId: number;
   stepIndex: number;
@@ -85,15 +71,15 @@ export interface ScenarioWriterProps {
   };
   className?: string;
   onScenarioDelete?: () => void;
-  stepDefinitions: any;
+  stepDefinitions: stepDefinitionProps[];
   scenario: ScenarioProps;
-  duplicateScenario: any;
+  duplicateScenario: (ScenarioId: number) => void;
   index: number;
 }
 
 // FeatureWriter props types
 export interface FeatureWriterProps {
-  onFeatureChange?: (val: any) => void;
+  onFeatureChange?: (val: FeatureProps | null) => void;
   rootProps?: {
     rootStyle?: string;
   };
@@ -120,7 +106,7 @@ export interface ScenarioProps {
   keyword: string;
   name: string;
   type?: string;
-  datatable?: any;
+  datatable?: EditorDatatableProps;
   steps: StepProps[];
 }
 
@@ -130,5 +116,55 @@ export interface StepProps {
   keyword: string;
   name: string;
   source_step: string;
-  params?: {page_url: string| undefined};
+  params?: { page_url: string |undefined};
+}
+export interface stepDefinitionProps {
+  source_step?: string;
+  params?: {
+    text?: string;
+    element_id?: string;
+    value?: string;
+    popup_text?:string
+    header_name?:string;
+    [key: string]: string | undefined;
+  }
+}
+
+// Edit Data table props
+
+export interface EditorDatatableProps {
+  type: string;
+  content: Content[];
+}
+
+export interface Content {
+  type: string;
+  content: Content2[];
+}
+
+export interface Content2 {
+  type: string;
+  content: Content3[];
+}
+
+export interface Content3 {
+  type: string;
+  attrs: Attrs;
+  content: Content4[];
+}
+
+export interface Attrs {
+  colspan: number;
+  rowspan: number;
+  colwidth: null;
+}
+
+export interface Content4 {
+  type: string;
+  content?: Content5[];
+}
+
+export interface Content5 {
+  type: string;
+  text: string;
 }

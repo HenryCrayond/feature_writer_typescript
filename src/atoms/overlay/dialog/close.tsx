@@ -6,6 +6,7 @@ import { DialogCloseProps } from '../../types';
 
 export const DialogClose = forwardRef((props:DialogCloseProps, propRef) => {
   const { children } = props;
+  
   const { setOpen } = useOverlayContext();
 
   const childrenRef = children.ref;

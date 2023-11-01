@@ -2,16 +2,8 @@ import { Autocomplete, Box, Input, Text } from '../../atoms';
 import { useLayoutEffect, useRef } from 'react';
 import { tw } from 'twind';
 import { addBackslashOnBefore } from '../../utils/helperFunctions';
-import { SelectedStepProps } from '../../types';
+import { SelectedStepProps, splittedStepObjPropType } from '../../types';
 
-interface splittedStepObjPropType {
-  component_to_render?: string;
-  id?: string;
-  placeholder?: string;
-  value?: string;
-  word?: string;
-  param? :string
-}
 
 export function SelectedStep({ data = [], options, onChange = () => false }:SelectedStepProps) {
   const listItemRef = useRef<any>([]);

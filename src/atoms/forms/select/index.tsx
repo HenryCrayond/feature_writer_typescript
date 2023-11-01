@@ -98,8 +98,8 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
     enabled: !open && !allowHover,
   });
 
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const listRef = useRef([]);
   const listContentRef = useRef([]);
@@ -107,7 +107,7 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
   const listNav = useListNavigation(data.context, {
     listRef,
     activeIndex,
-    onNavigate: () => setActiveIndex,
+    onNavigate: (number) => setActiveIndex(number),
     loop: true,
   });
 
@@ -115,7 +115,8 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
     listRef: listContentRef,
     activeIndex,
     selectedIndex,
-    onMatch: ()=> open ? setActiveIndex : setSelectedIndex,
+    onMatch: (number) =>
+      open ? setActiveIndex(number) : setSelectedIndex(number),
   });
 
   const interactions = useInteractions([
@@ -182,7 +183,9 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
             />
           }
           ref={ref}
-          {...select.getReferenceProps({...buttonProps} as React.HTMLProps<Element>)}
+          {...select.getReferenceProps({
+            ...buttonProps,
+          } as React.HTMLProps<Element>)}
           size={size}
         >
           {selectState?.value?.label ?? placeholder ?? "select"}
@@ -199,14 +202,19 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
                     key={index}
                     label={option.label}
                   >
-                    {option.options.map((groupOption:{label:string,value:string}, groupIndex:number) => (
-                      <Option
-                        {...optionProps}
-                        key={groupIndex}
-                        value={groupOption.value}
-                        label={groupOption.label}
-                      />
-                    ))}
+                    {option.options.map(
+                      (
+                        groupOption: { label: string; value: string },
+                        groupIndex: number
+                      ) => (
+                        <Option
+                          {...optionProps}
+                          key={groupIndex}
+                          value={groupOption.value}
+                          label={groupOption.label}
+                        />
+                      )
+                    )}
                   </OptionGroup>
                 );
               }
@@ -236,4 +244,3 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
 Select.displayName = "Select";
 
 export { Option, OptionGroup };
-

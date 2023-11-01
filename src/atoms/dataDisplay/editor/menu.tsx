@@ -1,4 +1,3 @@
-
 import {
   RiDeleteColumn,
   RiDeleteRow,
@@ -6,11 +5,10 @@ import {
   RiInsertColumnRight,
   RiInsertRowBottom,
   RiInsertRowTop,
-} from 'react-icons/ri';
-import { Button,Icon } from '../../../atoms';
+} from "react-icons/ri";
+import { Button, Icon } from "../../../atoms";
 
-export function Menu({ editor }:any) {
-  
+export function Menu({ editor }: any) {
   return (
     <>
       <Icon className="w-5 h-5" as={RiInsertColumnLeft} />

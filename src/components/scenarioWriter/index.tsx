@@ -29,12 +29,8 @@ import { MdContentCopy } from "react-icons/md";
 import { convertJsonToOptions } from "../../utils/helperFunctions";
 import { Menu, Option } from "../../atoms/overlay/menu";
 import { useFeatureStore } from "../../store/feature";
-import { ScenarioWriterProps, StepProps } from "../../types";
+import { EditorDatatableProps, OptionPropType, ScenarioWriterProps, StepProps } from "../../types";
 
-export interface MenuOnchangeProp {
-  label: string;
-  value: string;
-}
 const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
   const {
     rootProps = {},
@@ -61,13 +57,14 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
     updateScenarioTable,
   } = useFeatureStore();
 
-  const [options, setOptions] = useState<any>([]);
+  const [options, setOptions] = useState<OptionPropType[]|null>([]);
+
   const [confirmation, setConfirmation] = useState(false);
 
   // It converts the table headers to options for the autocomplete
   const handleTableHeaders = () => {
     if (scenario?.datatable?.content[0]) {
-      const result = convertJsonToOptions(scenario?.datatable?.content[0]);
+      const result  = convertJsonToOptions(scenario?.datatable?.content[0]);
       setOptions(result);
     }
   };
@@ -178,7 +175,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
               </DialogClose>
               <Datatable
                 datatable={scenario?.datatable}
-                onChange={(tableData: any) =>
+                onChange={(tableData: EditorDatatableProps) =>
                   updateScenarioTable(tableData, scenario, index)
                 }
               />
@@ -198,7 +195,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
         <Box ref={menuRef} rootStyle={`${focus}`}>
           <Menu
             ref={menuRef}
-            onChange={(e: MenuOnchangeProp) => {
+            onChange={(e: OptionPropType) => {
               handleMenu(e.value);
             }}
           >
