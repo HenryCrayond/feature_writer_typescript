@@ -47,6 +47,8 @@ export function setTheme(customTheme:any) {
 }
 
 export function updateParams(params?: ParamsPropType | any) {
+  console.log(params);
+  
   return Object.entries(params).reduce((updatedParams: any, [key, value]) => {
     if (
       typeof value === "string" &&
