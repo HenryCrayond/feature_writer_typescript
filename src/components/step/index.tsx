@@ -26,6 +26,7 @@ import { useFeatureStore } from "../../store/feature";
 import { keys } from "../../utils/constants";
 import {
   OptionPropType,
+  StepProps,
   StepsComponentProps,
   splittedStepObjPropType,
 } from "../../types";
@@ -148,7 +149,8 @@ const Step = forwardRef((props: StepsComponentProps) => {
           if (Object.keys(step.params).includes(String(word.param))) {
             array[index] = {
               ...word,
-              value: step.params[word.param] ?? "",
+              value:
+                step.params[word?.param as keyof StepProps["params"]] ?? "",
             };
           }
         }
@@ -167,13 +169,13 @@ const Step = forwardRef((props: StepsComponentProps) => {
   useEffect(() => {
     if (!splittedStep) return;
     const params = { ...step?.params };
-    const words = splittedStep.reduce(
+    const words: string[] = splittedStep.reduce(
       (prev: string[], curr: splittedStepObjPropType) => {
-        let result = curr?.value;
+        let result = curr?.value as string;
         // To update the params with the selected value
         if (cucumberExpressions.includes(String(curr?.word))) {
-          const key = curr?.param;
-          params[key] = result;
+          const key: string = curr.param;
+          params[key as keyof StepProps["params"]] = result;
         }
         // To add quotation if it is string and return
         if (["{string}"].includes(String(curr?.word))) {
@@ -188,7 +190,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
             result = `'${curr?.value}'`;
           }
         }
-        return [...prev, result];
+        return [...prev, result] as string[];
       },
       []
     );

@@ -19,11 +19,11 @@ interface ParamsPropType {
   page_url?: string;
 }
 interface ParamsStepPropType {
-  params: { page_url?: string; element_id?: string; text?: string };
-  source_step: string | any;
+  params: ParamsPropType|any;
+  source_step?: string | any;
 }
 
-export function setTheme(customTheme: any) {
+export function setTheme(customTheme:any) {
   const config = {
     preflight: () => ({
       ...customPreset,

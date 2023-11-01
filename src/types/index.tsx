@@ -6,12 +6,12 @@ export interface OptionPropType {
   value: string;
 }
 export interface splittedStepObjPropType {
-  component_to_render?: string;
-  id?: string;
-  placeholder?: string;
-  value?: string|number|any;
-  word?: string;
-  param?: string;
+  component_to_render: string;
+  id: string;
+  placeholder: string;
+  value: string|number;
+  word: string;
+  param: string;
 }
 export interface SelectedStepProps {
   data: splittedStepObjPropType[];
@@ -116,7 +116,7 @@ export interface StepProps {
   keyword: string;
   name: string;
   source_step: string;
-  params?: { page_url: string |undefined};
+  params: { page_url: string };
 }
 export interface stepDefinitionProps {
   source_step?: string;

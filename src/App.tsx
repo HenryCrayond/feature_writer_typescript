@@ -8,12 +8,14 @@ import { FeatureWriter, setupFWTheme } from "./components";
 import { FeatureProps } from './types';
 
 function App() {
+  console.log(setupFWTheme());
+  
   setupFWTheme();
   return (
     <Box rootStyle="bg-white min-h-screen max-w-4xl mx-auto">
       <Box rootStyle="min-h-screen">
         <FeatureWriter
-          onFeatureChange={(feature: FeatureProps) => console.log(feature)}
+          onFeatureChange={(feature: FeatureProps|null) => console.log(feature)}
           defaultFeature={
             {
             keyword: "Feature",
