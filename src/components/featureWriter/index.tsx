@@ -86,7 +86,9 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
       ) {
         setLoading(true);
         try {
-          const fileContent: any = await readFileContent(selectedFile);
+          const fileContent:string = await readFileContent(selectedFile);
+          console.log(fileContent,"fileContent");
+          
           const featureJSON = featureToJSON(fileContent, stepDefinition);
           updateFeature(featureJSON);
 
@@ -251,7 +253,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
                         "text-gray(500 600(hover:& focus:&)) w-6 h-6 cursor-pointer"
                       )}
                       onClick={() => {
-                        const featureFile: any = jsonToFeature(featureState);
+                        const featureFile = jsonToFeature(featureState);
                         saveFeatureFile(featureFile, featureState?.name);
                         setDownloaded(true);
                       }}

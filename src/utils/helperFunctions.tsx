@@ -447,9 +447,11 @@ export function featureToJSON(
   featureText: string,
   predefinedSteps: stepDefinitionProps[]
 ) {
+  console.log(typeof(featureText),"featureText");
+  
   try {
     // Split the feature text into lines and remove extra whitespace
-    const lines = featureText.split("\n").map((line) => line.trim());
+    const lines = featureText.split("\n").map((line:string) => line.trim());
 
     // Initialize the JSON data object with empty values
     const jsonData: FeatureProps = {
@@ -527,12 +529,12 @@ export function featureToJSON(
   }
 }
 
-export const readFileContent = (file: File) =>
+export const readFileContent = (file: File):Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = (event: ProgressEvent<FileReader>) => {
-      resolve(event?.target?.result);
+      resolve(event?.target?.result as string);
     };
 
     reader.onerror = (event: ProgressEvent<FileReader>) => {
