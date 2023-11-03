@@ -9,7 +9,7 @@ export interface splittedStepObjPropType {
   component_to_render: string;
   id: string;
   placeholder: string;
-  value: string|number;
+  value: string;
   word: string;
   param: string;
 }
@@ -116,10 +116,10 @@ export interface StepProps {
   keyword: string;
   name: string;
   source_step: string;
-  params: { page_url: string };
+  params: { page_url?: string};
 }
 export interface stepDefinitionProps {
-  source_step?: string;
+  source_step: string;
   params?: {
     text?: string;
     element_id?: string;

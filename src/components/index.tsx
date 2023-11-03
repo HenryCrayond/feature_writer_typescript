@@ -2,8 +2,6 @@ import { setTheme } from '../utils/helperFunctions';
 
 export function setupFWTheme(theme?:any) {
   // Important:  To set the theme for this component
-  console.log(theme,"9898686");
-  
   setTheme(theme);
 }
 

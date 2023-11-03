@@ -16,14 +16,14 @@ import {
 
 // To set the twind theme
 interface ParamsPropType {
-  page_url?: string;
+  page_url: string;
 }
 interface ParamsStepPropType {
-  params: ParamsPropType|any;
+  params: ParamsPropType | any;
   source_step?: string | any;
 }
 
-export function setTheme(customTheme:any) {
+export function setTheme(customTheme: any) {
   const config = {
     preflight: () => ({
       ...customPreset,
@@ -46,9 +46,7 @@ export function setTheme(customTheme:any) {
   setup(config);
 }
 
-export function updateParams(params?: ParamsPropType | any) {
-  console.log(params);
-  
+export function updateParams(params: ParamsPropType) {
   return Object.entries(params).reduce((updatedParams: any, [key, value]) => {
     if (
       typeof value === "string" &&
@@ -154,7 +152,9 @@ export function convertJsonToOptions(json: EditorDatatableProps) {
 
 // To create the individual line from the object
 
-export function lineGenerator(lineObject: any, description: any) {
+export function lineGenerator(lineObject: any, description?: string) {
+  console.log(lineObject,"111");
+  
   let line = "";
 
   if (description) {
@@ -185,7 +185,7 @@ export function lineGenerator(lineObject: any, description: any) {
 
 // To copy the feature
 
-export async function copyFeature(feature: any) {
+export async function copyFeature(feature: string) {
   try {
     await navigator.clipboard.writeText(feature);
   } catch (err) {
@@ -195,7 +195,7 @@ export async function copyFeature(feature: any) {
 
 // To save the feature file
 
-export function saveFeatureFile(feature: any, fileName: string) {
+export function saveFeatureFile(feature: string, fileName: string) {
   const blob = new Blob([feature], {
     type: "text/plain;charset=utf-8",
   });
@@ -214,10 +214,10 @@ export function jsonToFeature(jsonData: FeatureProps) {
     const featureDataCopy = JSON.parse(JSON.stringify(jsonData));
 
     // Initialize an array to store the lines of the feature file
-    const lines: any[] = [];
+    const lines: string[] = [];
 
     // Initialize an array to store the data types of datatable headers in scenario outlines
-    const headersDatatypes: any[] = [];
+    const headersDatatypes:any[] = [];
 
     // Function to create a line of the feature file and add it to the lines array
     function createLine(
@@ -231,7 +231,8 @@ export function jsonToFeature(jsonData: FeatureProps) {
     }
 
     // Recursive function to check whether every object in the hierarchy has a type property with the value 'text'
-    function checkText(obj: any) {
+    function checkText(obj: EditorDatatableProps|undefined) {
+      
       if (typeof obj === "object") {
         if (obj.type === "text") {
           return true;
@@ -259,15 +260,17 @@ export function jsonToFeature(jsonData: FeatureProps) {
         steps.map((step: StepProps) => {
           // If the scenario is a scenario outline, check for datatable headers with string values
           if (scenarioData?.keyword === "Scenario Outline") {
-            const result: any[] = compareSentences(step.name, step.source_step);
+            const result = compareSentences(step.name, step.source_step);
             if (result.every((value) => Boolean(value))) {
               headersDatatypes.push({
-                [result[0]]: result[1],
+                [result[0] as string]: result[1],
               });
             }
+
           }
           // Create a line for the step
           return createLine(step);
+
         });
       }
       // If the scenario is a scenario outline with a datatable, generate lines for the datatable
@@ -279,6 +282,8 @@ export function jsonToFeature(jsonData: FeatureProps) {
           scenarioData?.datatable,
           headersDatatypes
         );
+        console.log(datatable,"8");
+        
         // Add the datatable lines to the lines array
         lines.push(`\t\tExamples:\n\t\t\t${datatable}`);
       }
@@ -306,7 +311,6 @@ export function jsonToFeature(jsonData: FeatureProps) {
     } else if (featureDataCopy?.keyword === "Scenario") {
       scenarioGenerator(featureDataCopy);
     }
-
     // Join the lines array into a single string and return it
     const feature = lines.join("\n");
     return feature;
@@ -368,8 +372,9 @@ export const typeReturn = (type?: string, param?: string) => {
   }
 };
 
-export function parseNumber(input: any) {
-  // Remove any commas from the input string
+export function parseNumber(input: string) {
+  
+  // Remove commas from the input string
   input = input.replace(/,/g, "");
 
   // Check if the input string contains a decimal point or a floating point
@@ -401,23 +406,28 @@ export const constructStepView = (step: ParamsStepPropType) => {
   return array;
 };
 
-function getSourceStepWithParams(givenStep: any, predefinedSteps: any) {
+function getSourceStepWithParams(
+  givenStep: string,
+  predefinedSteps: stepDefinitionProps[]
+) {
   // Remove text enclosed within single quotes and numbers/floats
-
   const modifiedGivenStep = givenStep
     .replace(/'(?:\\.|[^'\\])*'|\b\d+(\.\d+)?\b/g, "") // Remove not a single quote or a backslash strings and numbers
     .replace(/\S+\\(?=\s|$)/g, "") // Remove words ending with a backslash
     .replace(/\s+/g, " ") // Replace multiple spaces with a single space
     .trim();
 
-  // match params any character that is not a single quote or double quote a backslash strings and numbers
+  // match params character that is not a single quote or double quote a backslash strings and numbers
   const matchedParams = givenStep.match(
     /'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\b(\d+(\.\d+)?)\b/g
   );
 
-  let matchedStep = null;
+  let matchedStep={
+    source_step:"",
+    params:{},
+  };
 
-  predefinedSteps.forEach((step: ParamsStepPropType) => {
+  predefinedSteps.forEach((step: stepDefinitionProps) => {
     const modifiedStep = step.source_step
       .split(" ")
       .filter((word: string) => !cucumberExpressions.includes(word))
@@ -425,11 +435,11 @@ function getSourceStepWithParams(givenStep: any, predefinedSteps: any) {
 
     if (modifiedGivenStep === modifiedStep) {
       let params = {};
-      Object.keys(step.params).forEach((param, index) => {
+      Object.keys(step.params || {}).forEach((param, index) => {
         params = {
           ...params,
-          [param]: matchedParams[index]
-            .replace(/^'(?![\\"])(.*)'$/, "$1") // It matches any character that is not a backslash with a double  or single quote.
+          [param]:matchedParams && matchedParams[index]
+            .replace(/^'(?![\\"])(.*)'$/, "$1") // It matches character that is not a backslash with a double  or single quote.
             .replace(/^'|'$/g, ""), // It matches beging to end remove single quote
         };
       });
@@ -447,11 +457,9 @@ export function featureToJSON(
   featureText: string,
   predefinedSteps: stepDefinitionProps[]
 ) {
-  console.log(typeof(featureText),"featureText");
-  
   try {
     // Split the feature text into lines and remove extra whitespace
-    const lines = featureText.split("\n").map((line:string) => line.trim());
+    const lines = featureText.split("\n").map((line: string) => line.trim());
 
     // Initialize the JSON data object with empty values
     const jsonData: FeatureProps = {
@@ -494,11 +502,10 @@ export function featureToJSON(
         const stepKeyword = line.split(" ")[0].trim();
         const stepName = line.replace(stepKeyword, "").trim();
         // Check if the stepName matches predefined step's source_step
-        const stepAndParams: ParamsStepPropType | any = getSourceStepWithParams(
+        const stepAndParams = getSourceStepWithParams(
           stepName,
           predefinedSteps
         );
-
         if (stepAndParams) {
           currentStep = {
             id: Date.now() + i,
@@ -529,7 +536,7 @@ export function featureToJSON(
   }
 }
 
-export const readFileContent = (file: File):Promise<string> =>
+export const readFileContent = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
 

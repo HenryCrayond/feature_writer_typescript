@@ -87,8 +87,6 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
         setLoading(true);
         try {
           const fileContent:string = await readFileContent(selectedFile);
-          console.log(fileContent,"fileContent");
-          
           const featureJSON = featureToJSON(fileContent, stepDefinition);
           updateFeature(featureJSON);
 

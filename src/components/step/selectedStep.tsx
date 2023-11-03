@@ -10,6 +10,7 @@ export function SelectedStep({ data = [], options, onChange = () => false }:Sele
   const selectedRef = useRef(null);
 
   const switchComponents = (val:splittedStepObjPropType) => {
+    
     switch (val.component_to_render) {
       case 'input':
         return (
