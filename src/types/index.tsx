@@ -15,7 +15,7 @@ export interface splittedStepObjPropType {
 }
 export interface SelectedStepProps {
   data: splittedStepObjPropType[];
-  options: []|OptionPropType[]|null;
+  options: [] | OptionPropType[] | null;
   addStep: (val: ScenarioProps, index: number) => void;
   onChange: (Obj: splittedStepObjPropType, value: string | number) => void;
 }
@@ -56,7 +56,7 @@ export interface StepsComponentProps {
   stepRootStyle?: string;
   addStep: (val: ScenarioProps, index: number) => void;
   stepDefinitions: stepDefinitionProps[];
-  options: OptionPropType[]|null;
+  options: OptionPropType[] | null;
   step: StepProps;
   dragHandleProps?: DraggableProvidedDragHandleProps | null | undefined;
   scenarioIndex: number;
@@ -106,6 +106,7 @@ export interface ScenarioProps {
   keyword: string;
   name: string;
   type?: string;
+  description?: string;
   datatable?: EditorDatatableProps;
   steps: StepProps[];
 }
@@ -116,18 +117,20 @@ export interface StepProps {
   keyword: string;
   name: string;
   source_step: string;
-  params: { page_url?: string};
+  description?: string;
+  params: { page_url?: string };
+}
+export interface updateParamsProp {
+  text?: string;
+  element_id?: string;
+  value?: string;
+  popup_text?: string;
+  header_name?: string;
+  [key: string]: string | undefined;
 }
 export interface stepDefinitionProps {
   source_step: string;
-  params?: {
-    text?: string;
-    element_id?: string;
-    value?: string;
-    popup_text?:string
-    header_name?:string;
-    [key: string]: string | undefined;
-  }
+  params?: updateParamsProp
 }
 
 // Edit Data table props

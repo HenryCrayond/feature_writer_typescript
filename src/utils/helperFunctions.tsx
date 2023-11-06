@@ -4,14 +4,18 @@
 import { cucumberExpressions } from "./constants";
 import { colors, customPreset } from "./theme";
 import FileSaver from "file-saver";
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 import { apply, setup } from "twind";
 import {
+  Content,
+  Content2,
+  Content3,
   EditorDatatableProps,
   FeatureProps,
   ScenarioProps,
   StepProps,
   stepDefinitionProps,
+  updateParamsProp,
 } from "../types";
 
 // To set the twind theme
@@ -19,8 +23,13 @@ interface ParamsPropType {
   page_url: string;
 }
 interface ParamsStepPropType {
-  params: ParamsPropType | any;
-  source_step?: string | any;
+  params: ParamsPropType;
+  source_step: string;
+}
+
+interface TableOpetion {
+  label: string;
+  value: string;
 }
 
 export function setTheme(customTheme: any) {
@@ -46,25 +55,34 @@ export function setTheme(customTheme: any) {
   setup(config);
 }
 
-export function updateParams(params: ParamsPropType) {
-  return Object.entries(params).reduce((updatedParams: any, [key, value]) => {
-    if (
-      typeof value === "string" &&
-      value.startsWith("<") &&
-      value.endsWith(">")
-    ) {
-      updatedParams[key] = null;
-    } else {
-      updatedParams[key] = value;
-    }
-    return updatedParams;
-  }, {});
+export function updateParams(params: updateParamsProp) {
+  return Object.entries(params).reduce(
+    (
+      updatedParams: { [key: string]: string | null | undefined },
+      [key, value]
+    ) => {
+      if (
+        typeof value === "string" &&
+        value.startsWith("<") &&
+        value.endsWith(">")
+      ) {
+        updatedParams[key] = null;
+      } else {
+        updatedParams[key] = value;
+      }
+      return updatedParams;
+    },
+    {}
+  );
 }
 
-export function useClickAway(ref: any, callback: any) {
+export function useClickAway(
+  ref: RefObject<HTMLInputElement>,
+  callback: () => void
+) {
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         callback();
       }
     };
@@ -84,29 +102,81 @@ export function compareSentences(sentence1: string, sentence2: string) {
 }
 
 // Editor component json to table
-export function datatableGenerator(json: any, headersDatatypes: any) {
-  const rows = json.content[0]?.content;
+// export function datatableGenerator(
+//   json: EditorDatatableProps | undefined,
+//   headersDatatypes: { [key: string]: string }[]
+// ) {
+//   const rows = json?.content[0]?.content;
 
-  const array = rows.map((eachRow: any) =>
-    eachRow.content.map(
-      (header: any) =>
-        header.content[0]?.content && header.content[0].content[0].text
-    )
-  );
-  const headers = array.shift();
+//   const array = rows?.map((eachRow: Content2) =>
+//     eachRow.content.map(
+//       (header: Content3) =>
+//         header.content[0]?.content && header.content[0].content[0].text
+//     )
+//   );
+//   const headers = array?.shift();
 
-  const columnWidths = headers.map((header: any, index: number) =>
-    Math.max(header.length, ...array.map((row: any) => row[index].length))
+//   const columnWidths:number[] | undefined = headers?.map(
+//     (header: string | undefined, index: number) =>
+//       Math.max(
+//         header?.length || 0,
+//         ...array.map((row: (string | undefined)[]) => row[index]?.length || 0)
+//       )
+//   );
+//   const table = array?.map(
+//       (row: (string | undefined)[]) =>
+//         `\t\t\t| ${row
+//           .map((cell: string | undefined, index: number) => {
+//             const result =
+//               headersDatatypes[index][headers[index]] === "string"
+//                 ? `"${cell||""}"`
+//                 : cell;
+//             return result.padEnd(columnWidths[index]);
+//           })
+//           .join(" | ")} |`
+//     )
+//     .join("\n");
+//     return `| ${headers
+//       ?.map((header: string | undefined, index: number) => header?.padEnd(columnWidths[index]) || "")
+//       .join(" | ")} |\n${table}`;
+// }
+
+export function datatableGenerator(
+  json: EditorDatatableProps | undefined,
+  headersDatatypes: {}[]
+): string {
+  if (!json) {
+    return ""; // or handle the undefined case as per your requirement
+  }
+
+  const rows: Content2[] | undefined = json.content[0]?.content;
+
+  const array: (string | undefined)[][] =
+    rows?.map((eachRow: Content2) =>
+      eachRow.content.map(
+        (header: Content3) =>
+          header.content[0]?.content && header.content[0].content[0].text
+      )
+    ) ?? [];
+
+  const headers: (string | undefined)[] = array.shift() ?? [];
+
+  const columnWidths: number[] = headers.map(
+    (header: string | undefined, index: number) =>
+      Math.max(
+        header?.length || 0,
+        ...array.map((row: (string | undefined)[]) => row[index]?.length || 0)
+      )
   );
   const table = array
     .map(
-      (row: any) =>
-        `\t\t\t| ${row
-          .map((cell: any, index: number) => {
-            const result =
-              headersDatatypes[index][headers[index]] === "string"
+      (row: (string | undefined)[]) =>
+        `| ${row
+          .map((cell: string | undefined, index: number) => {
+            const result: string =
+              headersDatatypes[headers[index] as keyof (string | undefined) ] === "string"
                 ? `"${cell}"`
-                : cell;
+                : cell || "";
             return result.padEnd(columnWidths[index]);
           })
           .join(" | ")} |`
@@ -114,23 +184,26 @@ export function datatableGenerator(json: any, headersDatatypes: any) {
     .join("\n");
 
   return `| ${headers
-    .map((header: any, index: number) => header.padEnd(columnWidths[index]))
+    .map(
+      (header: string | undefined, index: number) =>
+        header?.padEnd(columnWidths[index]) || ""
+    )
     .join(" | ")} |\n${table}`;
 }
 
 // Editor component json to autocomplete options
 
-export function convertJsonToOptions(json: EditorDatatableProps) {
+export function convertJsonToOptions(json: Content) {
   if (!json) return null;
-  const options: any[] = [];
+  const options: TableOpetion[] = [];
 
   if (json.type === "table") {
     const tableRows = json.content.filter(
-      (row: any) => row.type === "tableRow"
+      (row: Content2) => row.type === "tableRow"
     );
 
-    tableRows.forEach((tableRow: any) => {
-      tableRow.content.forEach((cell: any) => {
+    tableRows.forEach((tableRow: Content2) => {
+      tableRow.content.forEach((cell: Content3) => {
         if (
           cell.type === "tableHeader" &&
           cell.content[0]?.content &&
@@ -152,9 +225,10 @@ export function convertJsonToOptions(json: EditorDatatableProps) {
 
 // To create the individual line from the object
 
-export function lineGenerator(lineObject: any, description?: string) {
-  console.log(lineObject,"111");
-  
+export function lineGenerator(
+  lineObject: FeatureProps | ScenarioProps | StepProps,
+  description?: string
+) {
   let line = "";
 
   if (description) {
@@ -217,11 +291,10 @@ export function jsonToFeature(jsonData: FeatureProps) {
     const lines: string[] = [];
 
     // Initialize an array to store the data types of datatable headers in scenario outlines
-    const headersDatatypes:any[] = [];
-
+    const headersDatatypes: {}[] = [];
     // Function to create a line of the feature file and add it to the lines array
     function createLine(
-      obj?: FeatureProps | ScenarioProps | StepProps,
+      obj: FeatureProps | ScenarioProps | StepProps,
       description?: string
     ) {
       // Use the lineGenerator function to create a string from the object and optional description
@@ -231,15 +304,14 @@ export function jsonToFeature(jsonData: FeatureProps) {
     }
 
     // Recursive function to check whether every object in the hierarchy has a type property with the value 'text'
-    function checkText(obj: EditorDatatableProps|undefined) {
-      
+    function checkText(obj: Content | undefined) {
       if (typeof obj === "object") {
         if (obj.type === "text") {
           return true;
         }
         if (Array.isArray(obj.content)) {
           for (const item of obj.content) {
-            if (!checkText(item)) {
+            if (!checkText(item as any)) {
               return false;
             }
           }
@@ -266,11 +338,9 @@ export function jsonToFeature(jsonData: FeatureProps) {
                 [result[0] as string]: result[1],
               });
             }
-
           }
           // Create a line for the step
           return createLine(step);
-
         });
       }
       // If the scenario is a scenario outline with a datatable, generate lines for the datatable
@@ -282,8 +352,6 @@ export function jsonToFeature(jsonData: FeatureProps) {
           scenarioData?.datatable,
           headersDatatypes
         );
-        console.log(datatable,"8");
-        
         // Add the datatable lines to the lines array
         lines.push(`\t\tExamples:\n\t\t\t${datatable}`);
       }
@@ -373,7 +441,6 @@ export const typeReturn = (type?: string, param?: string) => {
 };
 
 export function parseNumber(input: string) {
-  
   // Remove commas from the input string
   input = input.replace(/,/g, "");
 
@@ -422,9 +489,9 @@ function getSourceStepWithParams(
     /'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\b(\d+(\.\d+)?)\b/g
   );
 
-  let matchedStep={
-    source_step:"",
-    params:{},
+  let matchedStep = {
+    source_step: "",
+    params: {},
   };
 
   predefinedSteps.forEach((step: stepDefinitionProps) => {
@@ -438,9 +505,11 @@ function getSourceStepWithParams(
       Object.keys(step.params || {}).forEach((param, index) => {
         params = {
           ...params,
-          [param]:matchedParams && matchedParams[index]
-            .replace(/^'(?![\\"])(.*)'$/, "$1") // It matches character that is not a backslash with a double  or single quote.
-            .replace(/^'|'$/g, ""), // It matches beging to end remove single quote
+          [param]:
+            matchedParams &&
+            matchedParams[index]
+              .replace(/^'(?![\\"])(.*)'$/, "$1") // It matches character that is not a backslash with a double  or single quote.
+              .replace(/^'|'$/g, ""), // It matches beging to end remove single quote
         };
       });
       matchedStep = {

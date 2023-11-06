@@ -159,6 +159,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
     if (type === "scenario" && scenario?.datatable) {
       const result = duplicateScenario.steps.map((step: StepProps) => {
         const params = updateParams(step?.params);
+
         return {
           ...step,
           params,

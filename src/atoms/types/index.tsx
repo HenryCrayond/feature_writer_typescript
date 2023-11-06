@@ -8,8 +8,9 @@ interface defaultValProps {
 }
 
 // Box prop types
-export interface BoxProps extends HTMLAttributes<HTMLDivElement> {
+export interface BoxProps extends Omit<HTMLAttributes<HTMLDivElement>,"id"> {
   rootStyle?: string;
+  id?:number|string;
 }
 
 // button prop types

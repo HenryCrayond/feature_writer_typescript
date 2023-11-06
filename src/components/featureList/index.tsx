@@ -94,7 +94,7 @@ const FeatureList = forwardRef((props:FeatureListProps) => {
                           )}
                           title="Copy Feature"
                           onClick={() => {
-                            const featureFile = jsonToFeature(feature);
+                            const featureFile = jsonToFeature(feature) as string;
                             
                             copyFeature(featureFile);
                             setCopied(true);
@@ -116,7 +116,7 @@ const FeatureList = forwardRef((props:FeatureListProps) => {
                             'text-primary(500 600(hover:& focus:&)) w-5 h-5 cursor-pointer'
                           )}
                           onClick={() => {
-                            const featureFile = jsonToFeature(feature);
+                            const featureFile = jsonToFeature(feature) as string;
                             saveFeatureFile(featureFile, feature?.name);
                             setDownloaded(true);
                           }}
