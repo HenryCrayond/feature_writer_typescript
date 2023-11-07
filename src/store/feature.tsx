@@ -68,7 +68,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
 
   // To handle feature change
   handleFeatureChange: (key, val) => {
-    set((state: any) => ({
+    set((state: any) => ({      
       featureState: {
         ...state.featureState,
         [key]: val,
@@ -327,7 +327,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
     const { featureState } = get();
 
     const featureStateCopy = JSON.parse(JSON.stringify(featureState));
-    let removedStep: StepProps[] | null | any = null;
+    let removedStep: StepProps[] | null = null;
 
     featureStateCopy.scenarios.forEach((scenario: ScenarioProps) => {
       if (scenario.id === Number(source.droppableId)) {
@@ -337,7 +337,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
 
     featureStateCopy.scenarios.forEach((scenario: ScenarioProps) => {
       if (scenario.id === Number(destination.droppableId)) {
-        scenario.steps.splice(destination.index, 0, removedStep[0]);
+        removedStep !== null && scenario.steps.splice(destination.index, 0, removedStep[0]);
       }
     });
     set({ featureState: { ...featureStateCopy } });

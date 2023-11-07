@@ -3,25 +3,26 @@ import { stepParamsFormatter } from "../utils/helperFunctions";
 import { stepDefinitionProps } from "../types";
 
 interface StepDefinitionStoreProp {
-  stepDefinition: stepDefinitionProps[]|[];
+  stepDefinition: stepDefinitionProps[] | [];
   isLoading: boolean;
   getStepDefinition: () => void;
 }
 
 interface DefenitionsRespons {
-  id?: string;
-  createdTime?: string;
-  Action?: string;
-  Description?: string;
-  Params?: string;
-  Status?: string;
-  Step?: string;
+  id: string;
+  createdTime: string;
+  fields: {
+    Action: string;
+    Description: string;
+    Params: string;
+    Status: string;
+    Step: string;
+  };
 }
 
 const formatStepDefinitions = (defenitionsRespons: DefenitionsRespons[]) => {
   const result: { source_step: string; params: {} }[] = [];
-  defenitionsRespons.forEach((record: DefenitionsRespons|any) => {
-
+  defenitionsRespons.forEach((record: DefenitionsRespons) => {
     const sourceStep = record?.fields?.Step.split("\n");
     if (sourceStep.length > 1) {
       const separatedParams = record?.fields?.Params?.split("\n") ?? [];
