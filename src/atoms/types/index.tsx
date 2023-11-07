@@ -8,7 +8,7 @@ interface defaultValProps {
 }
 
 // Box prop types
-export interface BoxProps extends Omit<HTMLAttributes<HTMLDivElement>,"id"> {
+export interface BoxProps extends Omit<HTMLAttributes<HTMLDivElement>, "id"> {
   rootStyle?: string;
   // id?:number|string;
 }
@@ -137,7 +137,7 @@ export interface InputProps {
 
   id?: string;
 
-  rootStyle?: string;
+  rootStyle?: {};
   /**
    * Defines the Value to be filled in the input field
    */
@@ -267,9 +267,8 @@ export interface SelectProps {
    */
   className?: string;
   /**
-    /**
-     * To handle modal open and close
-     */
+   * To handle modal open and close
+   */
   modal?: boolean;
   /**
    * This props used to placeholder text
@@ -335,7 +334,7 @@ export interface SelectProps {
   /**
    * placement
    */
-  placement?: any;
+  placement?: undefined;
   /**
    * is show Arrow
    */
@@ -353,7 +352,7 @@ export interface SelectProps {
    */
   children?: React.ReactNode;
 
-  arrowProps?: any;
+  arrowProps?: undefined;
 
   value?: string;
 
@@ -361,7 +360,7 @@ export interface SelectProps {
 
   optionGroupProps?: OptionGroupProps;
 
-  allowHover?: any;
+  allowHover?: undefined;
 
   variant?: string;
 
@@ -411,7 +410,7 @@ export interface OptionListProps {
    * Elements to be rendered inside the component
    */
   children?: React.ReactNode;
-  arrowProps?: any;
+  arrowProps?: undefined;
   /**
    * class name of the component for styling
    */
@@ -435,11 +434,12 @@ export interface OptionGroupProps {
 }
 
 // DialogClose props type
+
 export interface DialogCloseProps {
   /**
    * Elements to be rendered inside the component
    */
-  children: any;
+  children?: React.ReactNode|any;
 }
 
 // Dialog props types
@@ -460,12 +460,12 @@ export interface DialogContentProps {
   /**
    * Elements to be rendered inside the component
    */
-  children?: any;
+  children?: React.ReactNode;
   /**
    * class name of the component for styling
    */
   className?: string;
-  floatingOverlay?: any;
+  floatingOverlay?: undefined|{};
 }
 
 // DialogTrigger props type
@@ -473,7 +473,7 @@ export interface DialogTriggerProps {
   /**
    * Elements to be rendered inside the component
    */
-  children?: any;
+  children?: React.ReactNode|any;
   /**
    * class name of the component for styling
    */
@@ -531,7 +531,7 @@ export interface AutocompleteProps {
   /**
    * handle on input chnage events
    */
-  onInputChange?: (val: any) => void;
+  onInputChange?: (val:string) => void;
   /**
    * handle clearable input values
    */
@@ -543,7 +543,7 @@ export interface AutocompleteProps {
   /**
    * render options here
    */
-  options?: { label: string; value: string }[] | any;
+  options?: { label: string; value: string }[];
   /**
    * options props
    */
@@ -565,7 +565,7 @@ export interface AutocompleteProps {
   /**
    * placement
    */
-  placement?: any;
+  placement?: undefined;
   /**
    * is show Arrow
    */

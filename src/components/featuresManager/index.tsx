@@ -124,7 +124,7 @@ const FeaturesManager = forwardRef((props: any) => {
                     //   });
                   }}
                   showFeatureName={false}
-                  feature={feature}
+                  // feature={feature}
                   allowDownload={false}
                 />
               )

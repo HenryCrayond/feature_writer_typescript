@@ -70,7 +70,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
     val: any,
     scenarindex: number,
     stIndex: number
-  ) => {    
+  ) => {
     if (key === "source_step") {
       const result = constructStepView(val);
       setSplittedStep(result as splittedStepObjPropType[] | null);
@@ -140,21 +140,14 @@ const Step = forwardRef((props: StepsComponentProps) => {
         source_step: sourceStep?.source_step,
         params: sourceStep?.params,
       } as any);
-      result.forEach(
-        (
-          word: any,
-          index: number,
-          array: any[]
-        ) => {
-          if (Object.keys(step.params).includes(String(word.param))) {
-            array[index] = {
-              ...word,
-              value:
-                step.params[word?.param as keyof StepProps["params"]] ?? "",
-            };
-          }
+      result.forEach((word: any, index: number, array: any) => {
+        if (Object.keys(step.params).includes(String(word.param))) {
+          array[index] = {
+            ...word,
+            value: step.params[word?.param as keyof StepProps["params"]] ?? "",
+          };
         }
-      );
+      });
       setSplittedStep(result as splittedStepObjPropType[] | null);
     } else {
       setSplittedStep(null);
@@ -201,7 +194,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
   return (
     <>
       {step?.name && splittedStep && (
-        <Box rootStyle={rootTw} {...dragHandleProps}  className={tw`bg-white`}>
+        <Box rootStyle={rootTw} {...dragHandleProps} className={tw`bg-white`}>
           <Icon
             as={MdDragIndicator}
             className={tw("text-gray(300 400(hover:& focus:&)) cursor-pointer")}
@@ -346,10 +339,12 @@ const Step = forwardRef((props: StepsComponentProps) => {
             {!splittedStep && !step?.name && (
               <Autocomplete
                 className="text-sm font-medium w-full"
-                options={stepDefinitions.map((stepDefinition) => ({
-                  label: stepDefinition?.source_step,
-                  value: stepDefinition,
-                }))}
+                options={
+                  stepDefinitions.map((stepDefinition) => ({
+                    label: stepDefinition?.source_step,
+                    value: stepDefinition,
+                  })) as []
+                }
                 placeholder="Search to select step"
                 optionProps={{
                   className: "text-sm my-0.5 font-medium text-gray-500",

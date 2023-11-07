@@ -31,17 +31,16 @@ export interface optionsProp {
   value?: string;
 }
 
- interface useSelectPropType {
+interface useSelectPropType {
   value?: any;
   defaultValue?: optionsProp;
   onChange?: (vall: any) => void;
   controlledValue?: SelectProp;
-  [key: string]: any;
 }
 export interface useAutocompletePropType {
   clearable: boolean;
   onChange?: (option: any) => void;
-  onInputChange?: (value: any) => void;
+  onInputChange?: (value: string) => void;
   options?: {
     label: string;
     value: string;
@@ -50,9 +49,10 @@ export interface useAutocompletePropType {
 }
 
 interface SelectProp {
-    label: string;
-    value: string;
-  }
+  label: string;
+  value: string;
+}
+
 export function useOverlay(overlayType: string, options: OverlayOptinPropType) {
   const {
     initialOpen = false,
@@ -121,12 +121,12 @@ export const useOverlayListContext = () => {
 export function useSelect(options: useSelectPropType) {
   const { value: controlledValue, defaultValue, onChange } = options;
   const [selectedValue, setSelectedValue] = useState(defaultValue || null);
-   
+
   useEffect(() => {
     if (controlledValue !== undefined) {
       setSelectedValue(controlledValue);
     }
-  }, [controlledValue]); 
+  }, [controlledValue]);
 
   const handleOptionClick = (value: optionsProp) => {
     setSelectedValue(value);
@@ -161,7 +161,7 @@ export const useAutocomplete = ({
   clearable,
   options,
 }: useAutocompletePropType) => {
-  const [inputValue, setInputValue] = useState<string | any>(
+  const [inputValue, setInputValue] = useState<string | undefined | null>(
     defaultValue?.label ?? null
   );
   const [selectedValue, setSelectedValue] = useState(defaultValue ?? null);
@@ -216,7 +216,8 @@ export const useAutocomplete = ({
   };
 };
 
-export const AutocompleteContext = createContext<useAutocompletePropType | null>(null);
+export const AutocompleteContext =
+  createContext<useAutocompletePropType | null>(null);
 
 export const useAutocompleteContext = () => {
   const context = useContext(AutocompleteContext);

@@ -23,7 +23,6 @@ import { DialogContentProps } from '../../types';
           <FloatingOverlay
             className={tw(
               'bg-black bg-opacity-80 z-50 grid justify-items-center relative',
-             floatingOverlay?.className
             )}
             lockScroll
           >

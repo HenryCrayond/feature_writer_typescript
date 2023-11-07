@@ -6,7 +6,7 @@ import { DialogTriggerProps } from '../../types';
 
 export const DialogTrigger = forwardRef(({ children }:DialogTriggerProps, propRef) => {
   const context = useOverlayContext();
-  const childrenRef = children.ref;
+  const childrenRef = children?.ref;
 
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 

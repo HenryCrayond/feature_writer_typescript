@@ -306,6 +306,8 @@ export function jsonToFeature(jsonData: FeatureProps) {
 
     // Recursive function to check whether every object in the hierarchy has a type property with the value 'text'
     function checkText(obj: Content | undefined) {
+      console.log(obj,);
+      
       if (typeof obj === "object") {
         if (obj.type === "text") {
           return true;

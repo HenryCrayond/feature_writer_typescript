@@ -6,7 +6,7 @@ import { SelectedStepProps, splittedStepObjPropType } from '../../types';
 
 
 export function SelectedStep({ data = [], options, onChange = () => false }:SelectedStepProps) {
-  const listItemRef = useRef<any>([]);
+  const listItemRef:any = useRef([]);
   const selectedRef = useRef(null);
 
   const switchComponents = (val:splittedStepObjPropType) => {
@@ -34,7 +34,7 @@ export function SelectedStep({ data = [], options, onChange = () => false }:Sele
           <Box>
             <Autocomplete
               className={tw`text-sm font-medium text-primary-500`}
-              options={options}
+              options={options||[]}
               ref={(el) => {
                 listItemRef.current[
                   listItemRef?.current?.length > 0
@@ -99,7 +99,7 @@ export function SelectedStep({ data = [], options, onChange = () => false }:Sele
         (ref:any) => !ref.value
       );
       if (firstEmptyInputIndex !== -1) {
-        listItemRef.current[firstEmptyInputIndex].focus();
+        listItemRef?.current[firstEmptyInputIndex].focus();
       }
     }
   }, []);
