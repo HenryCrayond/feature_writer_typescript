@@ -32,14 +32,14 @@ export interface optionsProp {
 }
 
  interface useSelectPropType {
-  value?: string;
+  value?: any;
   defaultValue?: optionsProp;
   onChange?: (vall: any) => void;
-  controlledValue?: string | optionsProp;
+  controlledValue?: SelectProp;
   [key: string]: any;
 }
 export interface useAutocompletePropType {
-  clearable?: boolean;
+  clearable: boolean;
   onChange?: (option: any) => void;
   onInputChange?: (value: any) => void;
   options?: {
@@ -49,6 +49,10 @@ export interface useAutocompletePropType {
   defaultValue?: optionsProp | null;
 }
 
+interface SelectProp {
+    label: string;
+    value: string;
+  }
 export function useOverlay(overlayType: string, options: OverlayOptinPropType) {
   const {
     initialOpen = false,
@@ -116,15 +120,15 @@ export const useOverlayListContext = () => {
 
 export function useSelect(options: useSelectPropType) {
   const { value: controlledValue, defaultValue, onChange } = options;
-  const [selectedValue, setSelectedValue] = useState<any>(defaultValue || null);
-
+  const [selectedValue, setSelectedValue] = useState(defaultValue || null);
+   
   useEffect(() => {
     if (controlledValue !== undefined) {
       setSelectedValue(controlledValue);
     }
-  }, [controlledValue]);
+  }, [controlledValue]); 
 
-  const handleOptionClick = (value: string) => {
+  const handleOptionClick = (value: optionsProp) => {
     setSelectedValue(value);
     if (onChange) {
       onChange(value);
@@ -140,7 +144,7 @@ export function useSelect(options: useSelectPropType) {
   );
 }
 
-export const SelectContext = createContext<any | null>(null);
+export const SelectContext = createContext<useSelectPropType | null>(null);
 
 export const useSelectContext = () => {
   const context = useContext(SelectContext);
@@ -212,7 +216,7 @@ export const useAutocomplete = ({
   };
 };
 
-export const AutocompleteContext = createContext<any | null>(null);
+export const AutocompleteContext = createContext<useAutocompletePropType | null>(null);
 
 export const useAutocompleteContext = () => {
   const context = useContext(AutocompleteContext);

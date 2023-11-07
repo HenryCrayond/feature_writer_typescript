@@ -1,12 +1,13 @@
-import { Box, Button } from '../../atoms';
-import { FeatureList, FeatureWriter } from '../../components';
+import { Box, Button } from "../../atoms";
+import { FeatureList, FeatureWriter } from "../../components";
 // import { featureListReducer } from '../../store';
-import { apply } from 'twind';
-import { useEffect, useState, useRef, useReducer, forwardRef } from 'react';
+import { apply } from "twind";
+import { useEffect, useState, useRef, forwardRef } from "react";
+import { FeatureProps } from "../../types";
 
-const FeaturesManager = forwardRef((props:any) => {
+const FeaturesManager = forwardRef((props: any) => {
   const {
-    className = '',
+    className = "",
     onFeatureListChange = () => {},
     onFeatureDelete = () => {},
     featureList = null,
@@ -14,7 +15,7 @@ const FeaturesManager = forwardRef((props:any) => {
     allowDownload,
     allowCopy,
     saveButtonProps = {
-      text: 'Save Feature',
+      text: "Save Feature",
     },
   } = props;
   const { rootStyle, ...restRootProps } = rootProps;
@@ -22,41 +23,44 @@ const FeaturesManager = forwardRef((props:any) => {
 
   const rootRef = useRef();
 
-  const [featureListState, dispatch] = useReducer(
-    featureListReducer,
-    featureList
-  );
+  // const [featureListState, dispatch] = useReducer(
+  //   featureListReducer,
+  //   featureList
+  // );
+  const featureListState: any = {};
 
   const [activeFeature, setActiveFeature] = useState(null);
 
   const handleAddFeature = () => {
-    dispatch({
-      type: 'createFeature',
-    });
+    // dispatch({
+    //   type: 'createFeature',
+    // });
   };
-  const handleNameChange = (name, feature) => {
-    dispatch({
-      type: 'updateFeature',
-      payload: {
-        ...feature,
-        name,
-      },
-    });
+  const handleNameChange = (name: string, feature: FeatureProps) => {
+    console.log(name, feature);
+
+    // dispatch({
+    //   type: 'updateFeature',
+    //   payload: {
+    //     ...feature,
+    //     name,
+    //   },
+    // });
   };
 
-  const handleDeleteFeature = (feature) => {
-    dispatch({
-      type: 'deleteFeature',
-      payload: feature,
-    });
+  const handleDeleteFeature = (feature: FeatureProps) => {
+    // dispatch({
+    //   type: 'deleteFeature',
+    //   payload: feature,
+    // });
     onFeatureDelete(feature);
   };
 
   useEffect(() => {
     if (!featureList) {
-      dispatch({
-        type: 'createFeature',
-      });
+      // dispatch({
+      //   type: 'createFeature',
+      // });
     }
   }, []);
 
@@ -72,7 +76,9 @@ const FeaturesManager = forwardRef((props:any) => {
     if (
       featureListState &&
       activeFeature &&
-      !featureListState.find((feature) => feature.id === activeFeature)
+      !featureListState.find(
+        (feature: FeatureProps) => feature.id === activeFeature
+      )
     ) {
       setActiveFeature(featureListState[0].id);
     }
@@ -95,22 +101,27 @@ const FeaturesManager = forwardRef((props:any) => {
         allowDownload={allowDownload}
         allowCopy={allowCopy}
         flRootStyle="col-start-1 col-end-13 lg:(col-end-4)"
-        setActive={(id) => setActiveFeature(id)}
-        activeId={activeFeature}
+        setActive={(id) => setActiveFeature(id as any)}
+        activeId={activeFeature as any}
+        id={0}
+        keyword={""}
+        name={""}
+        description={""}
+        scenarios={[]}
       />
       <Box rootStyle="col-start-1 lg:(col-start-4) col-end-13">
         {featureListState &&
           featureListState.map(
-            (feature) =>
+            (feature: FeatureProps) =>
               feature.id === activeFeature && (
                 <FeatureWriter
                   key={feature.id}
                   allowCopy={false}
                   onFeatureChange={(featureState) => {
-                    dispatch({
-                      type: 'updateFeature',
-                      payload: featureState,
-                    });
+                    //   dispatch({
+                    //     type: 'updateFeature',
+                    //     payload: featureState,
+                    //   });
                   }}
                   showFeatureName={false}
                   feature={feature}
@@ -132,14 +143,14 @@ const FeaturesManager = forwardRef((props:any) => {
   );
 });
 
-FeaturesManager.displayName = 'FeatureManager';
+FeaturesManager.displayName = "FeatureManager";
 
 FeaturesManager.defaultProps = {
   // featureList: [],
   allowDownload: false,
   allowCopy: false,
   saveButtonProps: {
-    text: 'Save Feature',
+    text: "Save Feature",
   },
 };
 

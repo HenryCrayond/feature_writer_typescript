@@ -84,7 +84,6 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
     onOpenChange,
     middleware: middlewareOptions,
   });
-console.log(placement,"876");
 
   const dismiss = useDismiss(data.context);
   const role = useRole(data.context);
