@@ -233,7 +233,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
                       title="Copy Feature"
                       onClick={() => {
                         const featureFile = jsonToFeature(featureState);
-                        copyFeature(featureFile);
+                        copyFeature(featureFile as string);
                         setCopied(true);
                       }}
                     />
@@ -252,7 +252,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
                       )}
                       onClick={() => {
                         const featureFile = jsonToFeature(featureState);
-                        saveFeatureFile(featureFile, featureState?.name);
+                        saveFeatureFile(featureFile as string, featureState?.name);
                         setDownloaded(true);
                       }}
                     />

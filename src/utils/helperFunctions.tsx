@@ -174,7 +174,8 @@ export function datatableGenerator(
         `| ${row
           .map((cell: string | undefined, index: number) => {
             const result: string =
-              headersDatatypes[headers[index] as keyof (string | undefined) ] === "string"
+              headersDatatypes[headers[index] as keyof (string | undefined)] ===
+              "string"
                 ? `"${cell}"`
                 : cell || "";
             return result.padEnd(columnWidths[index]);

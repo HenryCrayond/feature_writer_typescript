@@ -73,7 +73,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
   ) => {
     if (key === "source_step") {
       const result = constructStepView(val);
-      setSplittedStep(result);
+      setSplittedStep(result as any);
       updateDefinitionStep(val?.source_step, scenarindex, stIndex);
     } else {
       stepOnChange(key, val, scenarindex, stIndex);
@@ -82,7 +82,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
 
   const handleStepInputsChange = (
     splittedStepObj: splittedStepObjPropType,
-    value: string | number
+    value: string
   ) => {
     const splittedStepCopy = JSON.parse(JSON.stringify(splittedStep));
 
@@ -139,12 +139,12 @@ const Step = forwardRef((props: StepsComponentProps) => {
       const result = constructStepView({
         source_step: sourceStep?.source_step,
         params: sourceStep?.params,
-      });
+      } as any);
       result.forEach(
         (
-          word: splittedStepObjPropType,
+          word: any,
           index: number,
-          array: splittedStepObjPropType[]
+          array: any[]
         ) => {
           if (Object.keys(step.params).includes(String(word.param))) {
             array[index] = {
@@ -155,7 +155,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
           }
         }
       );
-      setSplittedStep(result);
+      setSplittedStep(result as any);
     } else {
       setSplittedStep(null);
     }
@@ -241,7 +241,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
             <SelectedStep
               data={splittedStep}
               onChange={(splittedStepObj, value) => {
-                handleStepInputsChange(splittedStepObj, value);
+                handleStepInputsChange(splittedStepObj, value as string);
               }}
               options={step.name.includes("press the key") ? keys : options}
               addStep={addStep}
