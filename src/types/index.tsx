@@ -1,4 +1,4 @@
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { DraggableProvidedDragHandleProps, DroppableProvided } from "react-beautiful-dnd";
 
 // SelectedStep component props types
 export interface OptionPropType {
@@ -75,6 +75,8 @@ export interface ScenarioWriterProps {
   scenario: ScenarioProps;
   duplicateScenario: (ScenarioId: number) => void;
   index: number;
+  dragging:boolean;
+  provided:DroppableProvided
 }
 
 // FeatureWriter props types

@@ -201,7 +201,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
   return (
     <>
       {step?.name && splittedStep && (
-        <Box rootStyle={rootTw} {...dragHandleProps}>
+        <Box rootStyle={rootTw} {...dragHandleProps}  className={tw`bg-white`}>
           <Icon
             as={MdDragIndicator}
             className={tw("text-gray(300 400(hover:& focus:&)) cursor-pointer")}

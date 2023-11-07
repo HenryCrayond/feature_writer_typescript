@@ -29,17 +29,24 @@ import { MdContentCopy } from "react-icons/md";
 import { convertJsonToOptions } from "../../utils/helperFunctions";
 import { Menu, Option } from "../../atoms/overlay/menu";
 import { useFeatureStore } from "../../store/feature";
-import { EditorDatatableProps, OptionPropType, ScenarioWriterProps, StepProps } from "../../types";
+import {
+  EditorDatatableProps,
+  OptionPropType,
+  ScenarioWriterProps,
+  StepProps,
+} from "../../types";
 
-const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
+const ScenarioWriter = forwardRef((props: ScenarioWriterProps) => {
   const {
     rootProps = {},
     className = "",
-    onScenarioDelete=()=>{},
+    onScenarioDelete = () => {},
     stepDefinitions,
     scenario,
     duplicateScenario,
     index,
+    dragging,
+    provided,
   } = props;
 
   const { rootStyle, ...restRootProps } = rootProps;
@@ -57,14 +64,14 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
     updateScenarioTable,
   } = useFeatureStore();
 
-  const [options, setOptions] = useState<OptionPropType[]|null>([]);
+  const [options, setOptions] = useState<OptionPropType[] | null>([]);
 
   const [confirmation, setConfirmation] = useState(false);
 
   // It converts the table headers to options for the autocomplete
   const handleTableHeaders = () => {
     if (scenario?.datatable?.content[0]) {
-      const result  = convertJsonToOptions(scenario?.datatable?.content[0]);
+      const result = convertJsonToOptions(scenario?.datatable?.content[0]);
       setOptions(result);
     }
   };
@@ -80,7 +87,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
   useKeyPress(
     "enter",
     () => {
-      if (scenario?.name.length > 1) createStep(scenario,index);
+      if (scenario?.name.length > 1) createStep(scenario, index);
     },
     { target: nameRef }
   );
@@ -185,7 +192,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
       </Box>
       <Box rootStyle="flex items-center gap-2">
         <Input
-          ref={nameRef as  React.Ref<HTMLInputElement>}
+          ref={nameRef as React.Ref<HTMLInputElement>}
           rootStyle="flex-grow w-full"
           value={scenario?.name}
           onChange={(e) => handleScenarioChange("name", e.target.value, index)}
@@ -235,35 +242,41 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
         </Box>
       </Box>
 
-      {scenario?.steps &&
-        scenario.steps.length > 0 &&
-        scenario.steps.map((step: StepProps, i: number) => (
-          <Draggable
-            key={step?.id.toString()}
-            draggableId={step?.id.toString()}
-            index={i}
-          >
-            {(draggableprovided) => (
-              <div
-                ref={draggableprovided.innerRef}
-                {...draggableprovided.draggableProps}
-              >
-                <Step
-                  scenarioIndex={index}
-                  scenarioId={Number(scenario.id)}
-                  stepIndex={i}
-                  stepDefinitions={stepDefinitions}
-                  options={options}
-                  key={step?.id}
-                  step={step}
-                  addStep={createStep}
-                  dragHandleProps={draggableprovided.dragHandleProps}
-                />
-              </div>
-            )}
-          </Draggable>
-        ))}
-
+      <Box
+        rootStyle={`flex flex-col gap-y-3 ${
+          dragging && "bg-gray(200) flex flex-col p-2"
+        }`}
+      >
+        {scenario?.steps &&
+          scenario.steps.length > 0 &&
+          scenario.steps.map((step: StepProps, i: number) => (
+            <Draggable
+              key={step?.id.toString()}
+              draggableId={step?.id.toString()}
+              index={i}
+            >
+              {(draggableprovided) => (
+                <div
+                  ref={draggableprovided.innerRef}
+                  {...draggableprovided.draggableProps}
+                >
+                  <Step
+                    scenarioIndex={index}
+                    scenarioId={Number(scenario.id)}
+                    stepIndex={i}
+                    stepDefinitions={stepDefinitions}
+                    options={options}
+                    key={step?.id}
+                    step={step}
+                    addStep={createStep}
+                    dragHandleProps={draggableprovided.dragHandleProps}
+                  />
+                </div>
+              )}
+            </Draggable>
+          ))}
+        {provided?.placeholder}
+      </Box>
       <Button
         variant="ghost"
         size="sm"

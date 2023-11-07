@@ -4,6 +4,7 @@ import {
   Droppable,
   DropResult,
   DroppableProvided,
+  DroppableStateSnapshot,
 } from "react-beautiful-dnd";
 
 import {
@@ -284,12 +285,13 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
                   key={String(scenario.id)}
                   droppableId={String(scenario.id)}
                 >
-                  {(provided: DroppableProvided) => (
+                  {(provided: DroppableProvided,snapshot:DroppableStateSnapshot) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <ScenarioWriter
                         index={i}
                         key={scenario.id + i}
                         scenario={scenario}
+                        dragging={snapshot.isDraggingOver}
                         onScenarioDelete={() => {
                           handleScenarioDelete(scenario);
                         }}
@@ -297,8 +299,9 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
                         duplicateScenario={(scenarioId: number) =>
                           duplicateScenario(scenarioId)
                         }
+                        provided={provided}
                       />
-                      {provided.placeholder}
+                      
                     </div>
                   )}
                 </Droppable>
