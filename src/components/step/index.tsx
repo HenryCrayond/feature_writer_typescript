@@ -61,19 +61,19 @@ const Step = forwardRef((props: StepsComponentProps) => {
     splittedStepObjPropType[] | null
   >(null);
 
-  const keywordRef = useRef<any>(null);
+  const keywordRef = useRef<HTMLDivElement>(null);
 
-  const menuRef = useRef<any>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleStepChange = (
     key: string,
     val: any,
     scenarindex: number,
     stIndex: number
-  ) => {
+  ) => {    
     if (key === "source_step") {
       const result = constructStepView(val);
-      setSplittedStep(result as any);
+      setSplittedStep(result as splittedStepObjPropType[] | null);
       updateDefinitionStep(val?.source_step, scenarindex, stIndex);
     } else {
       stepOnChange(key, val, scenarindex, stIndex);
@@ -155,7 +155,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
           }
         }
       );
-      setSplittedStep(result as any);
+      setSplittedStep(result as splittedStepObjPropType[] | null);
     } else {
       setSplittedStep(null);
     }

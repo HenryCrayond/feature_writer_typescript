@@ -22,7 +22,7 @@ import {
 interface ParamsPropType {
   page_url: string;
 }
-interface ParamsStepPropType {
+export interface ParamsStepPropType {
   params: ParamsPropType;
   source_step: string;
 }

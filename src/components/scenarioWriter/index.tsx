@@ -46,9 +46,9 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
 
   const rootTw = `bg-white flex min-h-max flex-col gap-4 px-3 py-3 rounded shadow ${rootStyle}`;
 
-  const nameRef = useRef<any>(null);
-  const deleteRef = useRef(null);
-  const menuRef = useRef<any>(null);
+  const nameRef = useRef<HTMLDivElement>(null);
+  const deleteRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const {
     handleScenarioChange,
@@ -88,7 +88,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
   // Use useLayoutEffect to set focus after rendering
   useLayoutEffect(() => {
     if (!scenario?.name) {
-      nameRef.current.focus();
+      nameRef.current?.focus();
     }
   }, []);
 
@@ -185,7 +185,7 @@ const ScenarioWriter = forwardRef((props:ScenarioWriterProps) => {
       </Box>
       <Box rootStyle="flex items-center gap-2">
         <Input
-          ref={nameRef}
+          ref={nameRef as  React.Ref<HTMLInputElement>}
           rootStyle="flex-grow w-full"
           value={scenario?.name}
           onChange={(e) => handleScenarioChange("name", e.target.value, index)}

@@ -5,7 +5,7 @@ import { BoxProps } from "../../types";
 const Box = forwardRef(
   (
     props: BoxProps & {
-      id?: string;
+      id?: any;
     },
     ref: React.LegacyRef<HTMLDivElement> | undefined
   ) => {

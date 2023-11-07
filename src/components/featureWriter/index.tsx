@@ -72,7 +72,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
 
   const [downloaded, setDownloaded] = useState(false);
 
-  const rootRef: any = useRef();
+  const rootRef = useRef();
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -180,7 +180,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
   return (
     <Box
       rootStyle={rootTw}
-      ref={rootRef}
+      ref={rootRef as unknown as React.Ref<HTMLDivElement>}
       id="feature-writer"
       className={`FeatureWriter ${className}`}
       {...restRootProps}
