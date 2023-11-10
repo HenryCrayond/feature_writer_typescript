@@ -118,6 +118,8 @@ const FeaturesManager = forwardRef((props: any) => {
                   key={feature.id}
                   allowCopy={false}
                   onFeatureChange={(featureState) => {
+                    console.log(featureState);
+                    
                     //   dispatch({
                     //     type: 'updateFeature',
                     //     payload: featureState,

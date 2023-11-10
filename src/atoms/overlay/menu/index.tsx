@@ -16,6 +16,7 @@ import { MdMoreVert } from "react-icons/md";
 import {
   OverlayListContext,
   SelectContext,
+  UseSelectContextPropType,
   overlayMiddleware,
   useOverlay,
   useSelect,
@@ -76,11 +77,7 @@ export const Menu = forwardRef((props: MenuProps, propRef) => {
 
   const { size, ...buttonProps } = rest;
 
-  const selectState = useSelect({
-    value,
-    defaultValue,
-    onChange,
-  });
+  const selectState = useSelect({ value, defaultValue, onChange: () => {} });
 
   const data = useOverlay("listbox", {
     modal,
@@ -179,7 +176,7 @@ export const Menu = forwardRef((props: MenuProps, propRef) => {
 
   return (
     <OverlayListContext.Provider value={select}>
-      <SelectContext.Provider value={selectState}>
+      <SelectContext.Provider value={selectState as UseSelectContextPropType}>
         <Button
           variant="outlined"
           rootStyle={"border-0 p-0"}

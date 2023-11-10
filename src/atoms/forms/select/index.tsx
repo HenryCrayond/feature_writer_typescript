@@ -16,6 +16,7 @@ import { tw } from "twind";
 import {
   OverlayListContext,
   SelectContext,
+  UseSelectContextPropType,
   overlayMiddleware,
   useOverlay,
   useSelect,
@@ -70,11 +71,7 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
 
   const { size, ...buttonProps } = rest;
 
-  const selectState = useSelect({
-    value,
-    defaultValue,
-    onChange,
-  });
+  const selectState = useSelect({ value, defaultValue, onChange: () => {} });
 
   const data = useOverlay("listbox", {
     modal,
@@ -172,7 +169,7 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
 
   return (
     <OverlayListContext.Provider value={select}>
-      <SelectContext.Provider value={selectState}>
+      <SelectContext.Provider value={selectState as UseSelectContextPropType}>
         <Button
           rootStyle={`w-${width}`}
           rightIcon={

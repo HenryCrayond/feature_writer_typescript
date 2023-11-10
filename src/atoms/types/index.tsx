@@ -439,7 +439,7 @@ export interface DialogCloseProps {
   /**
    * Elements to be rendered inside the component
    */
-  children?: React.ReactNode|any;
+  children?: React.ReactNode | any;
 }
 
 // Dialog props types
@@ -465,7 +465,7 @@ export interface DialogContentProps {
    * class name of the component for styling
    */
   className?: string;
-  floatingOverlay?: undefined|{};
+  floatingOverlay?: undefined | {};
 }
 
 // DialogTrigger props type
@@ -473,7 +473,7 @@ export interface DialogTriggerProps {
   /**
    * Elements to be rendered inside the component
    */
-  children?: React.ReactNode|any;
+  children?: React.ReactNode | any;
   /**
    * class name of the component for styling
    */
@@ -531,7 +531,7 @@ export interface AutocompleteProps {
   /**
    * handle on input chnage events
    */
-  onInputChange?: (val:string) => void;
+  onInputChange?: (val: string) => void;
   /**
    * handle clearable input values
    */
@@ -638,4 +638,15 @@ export interface EditorProps {
    * to handle de bounds wait time
    */
   debounceWaitTime?: number;
+}
+
+// UseAutoCompleteProps
+export interface UseAutoCompleteContextProps {
+  clearable: boolean;
+  filteredOptions: {value: string, label: string}[];
+  handleChange: (option:any) => void;
+  handleClearValue: () => void;
+  handleInputChange: (value:any) => void;
+  inputValue: string;
+  selectedValue:{value: string, label: string}| null;
 }

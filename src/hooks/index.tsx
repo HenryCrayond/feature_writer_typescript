@@ -16,6 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { UseAutoCompleteContextProps } from "../atoms/types";
 
 export interface OverlayOptinPropType {
   initialOpen?: boolean;
@@ -26,26 +27,25 @@ export interface OverlayOptinPropType {
   middleware?: Middleware["options"];
 }
 
-export interface optionsProp {
-  label?: string;
-  value?: string;
+interface OptionProp {
+  label: string | undefined;
+  value: string | undefined;
 }
-
-interface useSelectPropType {
-  value?: any;
-  defaultValue?: optionsProp;
-  onChange?: (vall: any) => void;
-  controlledValue?: SelectProp;
+export interface UseSelectContextPropType {
+  value: any;
+  defaultValue: any;
+  onChange: (vall: OptionProp) => void;
 }
-export interface useAutocompletePropType {
+export interface UseAutocompletePropType {
   clearable: boolean;
-  onChange?: (option: any) => void;
-  onInputChange?: (value: string) => void;
-  options?: {
+  onChange: (option: any) => void;
+  onInputChange: (value: string) => void;
+  options: {
     label: string;
     value: string;
   }[];
-  defaultValue?: optionsProp | null;
+  defaultValue: SelectProp | null;
+  inputValue: string | null | undefined;
 }
 
 interface SelectProp {
@@ -118,8 +118,9 @@ export const useOverlayListContext = () => {
   return context;
 };
 
-export function useSelect(options: useSelectPropType) {
+export function useSelect(options: UseSelectContextPropType) {
   const { value: controlledValue, defaultValue, onChange } = options;
+
   const [selectedValue, setSelectedValue] = useState(defaultValue || null);
 
   useEffect(() => {
@@ -128,7 +129,7 @@ export function useSelect(options: useSelectPropType) {
     }
   }, [controlledValue]);
 
-  const handleOptionClick = (value: optionsProp) => {
+  const handleOptionClick = (value: SelectProp) => {
     setSelectedValue(value);
     if (onChange) {
       onChange(value);
@@ -137,14 +138,18 @@ export function useSelect(options: useSelectPropType) {
 
   return useMemo(
     () => ({
-      value: onChange && controlledValue ? controlledValue : selectedValue,
-      onChange: onChange && controlledValue ? onChange : handleOptionClick,
+      value:
+        Boolean(onChange) && controlledValue ? controlledValue : selectedValue,
+      onChange:
+        Boolean(onChange) && controlledValue ? onChange : handleOptionClick,
     }),
     [selectedValue]
   );
 }
 
-export const SelectContext = createContext<useSelectPropType | null>(null);
+export const SelectContext = createContext<UseSelectContextPropType | null>(
+  null
+);
 
 export const useSelectContext = () => {
   const context = useContext(SelectContext);
@@ -160,17 +165,17 @@ export const useAutocomplete = ({
   onInputChange,
   clearable,
   options,
-}: useAutocompletePropType) => {
+}: UseAutocompletePropType) => {
   const [inputValue, setInputValue] = useState<string | undefined | null>(
     defaultValue?.label ?? null
   );
   const [selectedValue, setSelectedValue] = useState(defaultValue ?? null);
 
-  const [filteredOptions, setFilteredOptions] = useState<optionsProp | any>(
+  const [filteredOptions, setFilteredOptions] = useState<SelectProp | any>(
     options || []
   );
 
-  const handleChange = (option: optionsProp) => {
+  const handleChange = (option: SelectProp) => {
     setFilteredOptions([option]);
     setSelectedValue(option);
     setInputValue(option?.label);
@@ -184,8 +189,9 @@ export const useAutocomplete = ({
       setFilteredOptions(options);
       setSelectedValue(null);
     } else {
-      const filteredOptionsResult = options?.filter((option) =>
-        option.label.toLowerCase().includes(value.toLowerCase())
+      const filteredOptionsResult = options?.filter(
+        (option: { label: string; value: string }) =>
+          option.label.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredOptions(filteredOptionsResult);
     }
@@ -217,7 +223,7 @@ export const useAutocomplete = ({
 };
 
 export const AutocompleteContext =
-  createContext<useAutocompletePropType | null>(null);
+  createContext<UseAutoCompleteContextProps | null>(null);
 
 export const useAutocompleteContext = () => {
   const context = useContext(AutocompleteContext);

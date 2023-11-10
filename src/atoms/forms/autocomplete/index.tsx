@@ -18,13 +18,14 @@ import {
   OverlayListContext,
   overlayMiddleware,
   useAutocomplete,
+  UseAutocompletePropType,
   useOverlay,
 } from "../../../hooks";
 import { Input } from "../input";
 import { OptionList } from "../select/optionList";
 import { EmptyState } from "./emptyState";
 import { Option } from "./option";
-import { AutocompleteProps } from "../../types";
+import { AutocompleteProps, UseAutoCompleteContextProps } from "../../types";
 
 export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
   const {
@@ -77,7 +78,7 @@ export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
     onInputChange,
     clearable,
     options,
-  });
+  } as UseAutocompletePropType);
 
   const data = useOverlay("listbox", {
     modal,
@@ -152,10 +153,11 @@ export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
       setActiveIndex(null);
     }
   }
+console.log(autocompleteState,"----");
 
   return (
     <OverlayListContext.Provider value={autocomplete}>
-      <AutocompleteContext.Provider value={autocompleteState}>
+      <AutocompleteContext.Provider value={autocompleteState as UseAutoCompleteContextProps}>
         <Input
           leftIcon={<RiSearchLine className={tw`w-4 h-4`} />}
           variant="flushed"

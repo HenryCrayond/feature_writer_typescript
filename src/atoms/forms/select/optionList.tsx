@@ -71,7 +71,6 @@ const OptionList = forwardRef((props: OptionListProps, propRef) => {
                 context={context}
                 className={tw(
                   "fill-white [&>path:last-of-type]:stroke-gray-100",
-                  arrowProps?.className
                 )}
               />
             )}
