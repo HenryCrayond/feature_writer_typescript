@@ -80,7 +80,7 @@ export const Menu = forwardRef((props: MenuProps, propRef) => {
     value,
     defaultValue,
     onChange,
-  });
+  } as any);
 
   const data = useOverlay("listbox", {
     modal,
@@ -179,7 +179,7 @@ export const Menu = forwardRef((props: MenuProps, propRef) => {
 
   return (
     <OverlayListContext.Provider value={select}>
-      <SelectContext.Provider value={selectState}>
+      <SelectContext.Provider value={selectState as any}>
         <Button
           variant="outlined"
           rootStyle={"border-0 p-0"}

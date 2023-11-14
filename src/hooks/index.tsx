@@ -16,6 +16,10 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  UseAutocompleteContextProp,
+  UseAutocompletePropType,
+} from "../atoms/types";
 
 export interface OverlayOptinPropType {
   initialOpen?: boolean;
@@ -32,22 +36,11 @@ export interface optionsProp {
 }
 
 interface useSelectPropType {
-  value?: any;
-  defaultValue?: optionsProp;
-  onChange?: (vall: any) => void;
-  controlledValue?: SelectProp;
+  value: any;
+  defaultValue: optionsProp;
+  onChange: (vall: any) => void;
+  controlledValue: SelectProp;
 }
-export interface useAutocompletePropType {
-  clearable: boolean;
-  onChange?: (option: any) => void;
-  onInputChange?: (value: string) => void;
-  options?: {
-    label: string;
-    value: string;
-  }[];
-  defaultValue?: optionsProp | null;
-}
-
 interface SelectProp {
   label: string;
   value: string;
@@ -137,8 +130,8 @@ export function useSelect(options: useSelectPropType) {
 
   return useMemo(
     () => ({
-      value: onChange && controlledValue ? controlledValue : selectedValue,
-      onChange: onChange && controlledValue ? onChange : handleOptionClick,
+      value: controlledValue ? controlledValue : selectedValue,
+      onChange: controlledValue ? onChange : handleOptionClick,
     }),
     [selectedValue]
   );
@@ -160,11 +153,13 @@ export const useAutocomplete = ({
   onInputChange,
   clearable,
   options,
-}: useAutocompletePropType) => {
+}: UseAutocompletePropType) => {
   const [inputValue, setInputValue] = useState<string | undefined | null>(
     defaultValue?.label ?? null
   );
-  const [selectedValue, setSelectedValue] = useState(defaultValue ?? null);
+  const [selectedValue, setSelectedValue] = useState<optionsProp | null>(
+    defaultValue ?? null
+  );
 
   const [filteredOptions, setFilteredOptions] = useState<optionsProp | any>(
     options || []
@@ -217,7 +212,7 @@ export const useAutocomplete = ({
 };
 
 export const AutocompleteContext =
-  createContext<useAutocompletePropType | null>(null);
+  createContext<UseAutocompleteContextProp | null>(null);
 
 export const useAutocompleteContext = () => {
   const context = useContext(AutocompleteContext);

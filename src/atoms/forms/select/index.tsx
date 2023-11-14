@@ -74,7 +74,7 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
     value,
     defaultValue,
     onChange,
-  });
+  }as any);
 
   const data = useOverlay("listbox", {
     modal,
@@ -172,7 +172,7 @@ export const Select = forwardRef((props: SelectProps, propRef) => {
 
   return (
     <OverlayListContext.Provider value={select}>
-      <SelectContext.Provider value={selectState}>
+      <SelectContext.Provider value={selectState as any}>
         <Button
           rootStyle={`w-${width}`}
           rightIcon={

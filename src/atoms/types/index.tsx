@@ -639,3 +639,28 @@ export interface EditorProps {
    */
   debounceWaitTime?: number;
 }
+// useAutocompletePropType props
+export interface OptionsProp {
+  label: string;
+  value: string;
+}
+export interface UseAutocompletePropType {
+  clearable: boolean;
+  onChange?: (option: any) => void;
+  onInputChange?: (value: string) => void;
+  options?: {
+    label: string;
+    value: string;
+  }[];
+  defaultValue?: OptionsProp | null;
+}
+
+export interface UseAutocompleteContextProp{
+  clearable: boolean;
+  filteredOptions:OptionsProp[];
+  handleChange:(option:any)=>void;
+  handleClearValue:()=>void;
+  handleInputChange:(value:string)=>void;
+  inputValue:string;
+  selectedValue:OptionsProp
+}

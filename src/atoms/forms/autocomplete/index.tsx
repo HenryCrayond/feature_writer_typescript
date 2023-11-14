@@ -24,7 +24,7 @@ import { Input } from "../input";
 import { OptionList } from "../select/optionList";
 import { EmptyState } from "./emptyState";
 import { Option } from "./option";
-import { AutocompleteProps } from "../../types";
+import { AutocompleteProps, UseAutocompleteContextProp } from "../../types";
 
 export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
   const {
@@ -77,7 +77,7 @@ export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
     onInputChange,
     clearable,
     options,
-  });
+  } as any);
 
   const data = useOverlay("listbox", {
     modal,
@@ -155,7 +155,7 @@ export const Autocomplete = forwardRef((props: AutocompleteProps, propRef) => {
 
   return (
     <OverlayListContext.Provider value={autocomplete}>
-      <AutocompleteContext.Provider value={autocompleteState}>
+      <AutocompleteContext.Provider value={autocompleteState as UseAutocompleteContextProp}>
         <Input
           leftIcon={<RiSearchLine className={tw`w-4 h-4`} />}
           variant="flushed"

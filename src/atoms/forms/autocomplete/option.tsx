@@ -13,6 +13,7 @@ export const Option = forwardRef((props:OptionProps, propRef:React.Ref<HTMLDivEl
   const { activeIndex, listContentRef, setOpen, refs } =useOverlayListContext();
 
   const { selectedValue, handleChange } = useAutocompleteContext();
+  console.log(useAutocompleteContext(),"098765");
   
   const { ref, index } = useListItem();
 
