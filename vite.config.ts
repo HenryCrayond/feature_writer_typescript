@@ -1,22 +1,28 @@
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import path from "path";
 import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
+import { terser } from 'rollup-plugin-terser';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [react()],
   server: {
-    port: 3001,
+    port: 3000,
   },
-
+  preview: {
+    port: 4000,
+  },
   build: {
     minify: true,
     lib: {
-      entry: resolve(__dirname, "src/components"),
-      // entry: "src/components",
+      entry: "src/components",
       fileName: "index",
       formats: ["es"],
     },
+    rollupOptions: {
+      plugins: [terser()],
+      external: ["react", "react-dom"],
+    },
   },
-  plugins: [react(), dts({ include: ["src/components"] })],
 });
