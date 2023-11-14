@@ -11,6 +11,8 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "declaration": true,
+    "typeRoots": ["./dist/index.d.ts"],
     "noEmit": true,
     "jsx": "react-jsx",
 
@@ -20,6 +22,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src","./index.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
