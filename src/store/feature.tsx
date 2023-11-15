@@ -68,7 +68,7 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
 
   // To handle feature change
   handleFeatureChange: (key, val) => {
-    set((state: any) => ({      
+    set((state: any) => ({
       featureState: {
         ...state.featureState,
         [key]: val,
@@ -90,9 +90,12 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
 
   // To update a Feature
   updateFeature: (updateFeature) => {
-    set({
-      featureState: updateFeature,
-    });
+    set((state: any) => ({
+      featureState: {
+        ...state.featureState,
+        ...updateFeature,
+      },
+    }));
   },
 
   // To create a Scenario
@@ -337,7 +340,8 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
 
     featureStateCopy.scenarios.forEach((scenario: ScenarioProps) => {
       if (scenario.id === Number(destination.droppableId)) {
-        removedStep !== null && scenario.steps.splice(destination.index, 0, removedStep[0]);
+        removedStep !== null &&
+          scenario.steps.splice(destination.index, 0, removedStep[0]);
       }
     });
     set({ featureState: { ...featureStateCopy } });

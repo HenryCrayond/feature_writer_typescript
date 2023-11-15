@@ -135,20 +135,18 @@ console.log(featureState,"test-type");
     }
   }, [defaultFeature]);
 
+  
   useEffect(() => {
     const stateNotChanged = isEqual(defaultFeature, featureState);
     if (!stateNotChanged) {
-      if (onFeatureChange) {
+      if (!showFeatureName) {
+        onFeatureChange({
+          ...featureState,
+          name: defaultFeature?.name ?? featureState?.name,
+        }as FeatureProps);
+      } else {
         onFeatureChange(featureState);
       }
-    }
-    if (!showFeatureName) {
-      onFeatureChange({
-        ...featureState,
-        name: defaultFeature?.name ?? "",
-      }as FeatureProps);
-    } else {
-      onFeatureChange(featureState);
     }
   }, [featureState]);
 
