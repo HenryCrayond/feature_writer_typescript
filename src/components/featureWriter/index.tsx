@@ -63,7 +63,7 @@ const FeatureWriter = forwardRef((props: FeatureWriterProps) => {
     handleScenarioDelete,
     dragAndDropChange,
   } = useFeatureStore();
-console.log(featureState,"test-type");
+console.log(featureState,"test-");
 
   const { isLoading, stepDefinition, getStepDefinition } =
     getApiStepDefinitions();
