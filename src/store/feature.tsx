@@ -57,7 +57,7 @@ interface FeatureStorePropType {
     scenarioIndex: number,
     stepIndex: number
   ) => void;
-  editSteps: (step: StepProps, scenarioId: number, stepIndex: number) => void;
+  editSteps: (step: StepProps, scenarioId: number) => void;
   handleScenarioChange: (key: string, val: string, index: number) => void;
   dragAndDropChange: (source: DragDropProp, destination: DragDropProp) => void;
 }
@@ -294,22 +294,36 @@ export const useFeatureStore = create<FeatureStorePropType>((set, get) => ({
   },
 
   // To edit Steps
-  editSteps: (step, scenarioId, stepIndex) => {
+  editSteps: (step, scenarioId) => {
     const { featureState } = get();
     const featureStateCopy = JSON.parse(JSON.stringify(featureState));
 
     const findScenario = featureStateCopy.scenarios.find(
-      (val: ScenarioProps) => Number(val.id) === scenarioId
+      (val:ScenarioProps) => val.id === scenarioId
     );
+    // Find the index of the scenario
     const scenarioIndex = featureStateCopy.scenarios.indexOf(findScenario);
 
+    // Find the index of the step to be replaced within the scenario
+    const stepToUpdateIndex = featureStateCopy.scenarios[
+      scenarioIndex
+    ].steps.findIndex((item:StepProps) => item.id === step.id);
+
+    const editStep = featureStateCopy.scenarios[scenarioIndex].steps.filter(
+      (item:StepProps) => item.id === step.id
+    );
     const copiedStep = {
-      ...step,
-      name: "",
-      source_step: "",
+      ...editStep[0],
+      name: '',
+      source_step: '',
       params: {},
     };
-    featureStateCopy.scenarios[scenarioIndex].steps[stepIndex] = copiedStep;
+
+    // Replace the step at the found index with the modified copiedStep
+    featureStateCopy.scenarios[scenarioIndex].steps[stepToUpdateIndex] =
+      copiedStep;
+
+    // Update the featureState with the modified featureStateCopy
     set({ featureState: { ...featureStateCopy } });
   },
 

@@ -104,7 +104,7 @@ const Step = forwardRef((props: StepsComponentProps) => {
   };
 
   const handleStepEdit = () => {
-    editSteps(step, scenarioId, stepIndex);
+    editSteps(step, scenarioId);
     setSplittedStep(null);
   };
 
@@ -194,7 +194,11 @@ const Step = forwardRef((props: StepsComponentProps) => {
   return (
     <>
       {step?.name && splittedStep && (
-        <Box rootStyle={rootTw} {...dragHandleProps} className={tw`bg-white px-1`}>
+        <Box
+          rootStyle={rootTw}
+          {...dragHandleProps}
+          className={tw`bg-white rounded px-0.5`}
+        >
           <Icon
             as={MdDragIndicator}
             className={tw("text-gray(300 400(hover:& focus:&)) cursor-pointer")}
@@ -299,7 +303,11 @@ const Step = forwardRef((props: StepsComponentProps) => {
         </Box>
       )}
       {!step.name && (
-        <Box rootStyle={rootTw} {...dragHandleProps}>
+        <Box
+          rootStyle={rootTw}
+          {...dragHandleProps}
+          className={tw`bg-white rounded px-0.5`}
+        >
           <Icon
             as={MdDragIndicator}
             className={tw("text-gray(300 400(hover:& focus:&)) cursor-pointer")}
